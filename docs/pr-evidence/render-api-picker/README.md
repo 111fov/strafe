@@ -31,8 +31,8 @@ layout were inspected. Windows/macOS surfaces and the reporter's older GPU remai
 To reproduce, build each revision with:
 
 ```sh
-cargo build --locked -p serein --features demo --bin serein
-DISPLAY=:99 target/debug/serein --demo --demo-settings=general
+cargo build --locked -p strafe --features demo --bin strafe
+DISPLAY=:99 target/debug/strafe --demo --demo-settings=general
 ```
 
 Use a dedicated Xvfb display with a 1360 × 1040 screen, resize the app window to the

@@ -13,7 +13,7 @@ it selects incompatible windows 0.61.3 types. No other baseline UI code changed.
 Use pinned Rust 1.98.1 and separate baseline/changed worktrees. In each worktree:
 
 ```powershell
-cargo build --release --locked -p serein --features demo --example profile_preview
+cargo build --release --locked -p strafe --features demo --example profile_preview
 $preview = Join-Path $env:CARGO_TARGET_DIR 'release/examples/profile_preview.exe'
 & $preview --demo --page=channel-links --width=1120 --height=900 --output=target/pills-dark.png
 & $preview --demo --page=channel-links --width=720 --height=900 --light --output=target/pills-light-narrow.png

@@ -156,7 +156,7 @@ only this account and known group recipients, rejects duplicate participants, an
 to 64 participants per call. Recipient removal drops stale participant/watch UI state; removal
 of this account closes local media and revokes subsequent call actions.
 
-The offline debug command is `cargo run --locked -p serein --example group_call`.
+The offline debug command is `cargo run --locked -p strafe --example group_call`.
 Group signaling remains unofficial and live-unverified. For owner-controlled verification,
 repeat the one-to-one gate below in a private group whose participating clients the owner
 controls, including simultaneous speech, additions/removals, ringing/decline/join, camera,
@@ -316,7 +316,7 @@ Audio/transport worker failures use a separate fixed slot so a full progress que
 cannot discard the cause. Copying includes only the failure text, not participants,
 channel identifiers, credentials or media. The timing summaries below do not explain
 a terminal failure; copy the failed-call reason as well when troubleshooting.
-`cargo run --locked -p serein -- --demo --demo-voice-failed` previews a synthetic
+`cargo run --locked -p strafe -- --demo --demo-voice-failed` previews a synthetic
 failure and checks that subsequent cleanup/progress events retain its original reason.
 
 Set `SEREIN_VOICE_DIAGNOSTICS=1` before launching Serein to get aggregate voice
@@ -594,7 +594,7 @@ Use two clients with headphones, enable audio on the sender, play another app an
 from the viewer: the app should be audible without the viewer's voice returning in the
 stream. Repeat while starting/stopping apps, changing outputs, rekeying and stopping sharing.
 
-The native demo (`cargo run --locked -p serein -- --demo --demo-voice`) exposes a synthetic picker without OS source discovery or capture. Live screen sharing requires the same owner-controlled login gate as voice testing. See [compatibility and limits](discord-compatibility.md#outgoing-screen-sharing--september-11-2026).
+The native demo (`cargo run --locked -p strafe -- --demo --demo-voice`) exposes a synthetic picker without OS source discovery or capture. Live screen sharing requires the same owner-controlled login gate as voice testing. See [compatibility and limits](discord-compatibility.md#outgoing-screen-sharing--september-11-2026).
 
 ## Camera in calls (macOS, Windows and Linux)
 
@@ -1120,7 +1120,7 @@ alone never opens streams. Leaving the voice settings page, joining a call, logo
 stop the preview. Testing is disabled during calls and in offline demo mode.
 The existing eight-frame rings bound loopback PCM; meter state is one atomic value and is not
 persisted. The meter is measured before the sensitivity gate; playback follows the gate.
-`cargo run --locked -p serein --features demo -- --demo --demo-check-mic-preview`
+`cargo run --locked -p strafe --features demo -- --demo --demo-check-mic-preview`
 checks settings rendering and capture guards without opening devices. Physical loopback and
 microphone permission prompts remain owner-verified behavior.
 

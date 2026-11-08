@@ -172,8 +172,8 @@ impl Audio {
 		};
 		let worker = self.worker.as_ref().expect("worker created");
 		if worker.requests.is_closed() {
-			self.status.state = State::Failed("Audio worker stopped; restart Aurora");
-			return Err("Audio worker stopped; restart Aurora");
+			self.status.state = State::Failed("Audio worker stopped; restart Strafe");
+			return Err("Audio worker stopped; restart Strafe");
 		}
 		worker.requests.send_replace(Some(Request {
 			generation,

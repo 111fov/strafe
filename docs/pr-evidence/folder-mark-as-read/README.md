@@ -19,7 +19,7 @@ menu's rendered state; they do not claim an enabled-action click against live un
 At each source revision, build and launch only the synthetic demo:
 
 ```powershell
-cargo build --release --locked -p serein --no-default-features --features demo
+cargo build --release --locked -p strafe --no-default-features --features demo
 & .\target\release\serein.exe --demo
 ```
 

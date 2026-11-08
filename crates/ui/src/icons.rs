@@ -1,4 +1,4 @@
-//! Phosphor Icons (MIT), Simple Icons brand marks (CC0) and the Aurora mark rasterized once
+//! Phosphor Icons (MIT), Simple Icons brand marks (CC0) and the Strafe mark rasterized once
 //! into one bundled atlas and tinted at draw time.
 //!
 //! `assets/icons/atlas.png` holds white glyphs on transparency in fixed 64px cells;
@@ -77,7 +77,7 @@ pub enum Icon {
 	Copy,
 	Verified,
 	Calendar,
-	Aurora,
+	Strafe,
 	File,
 	FileImage,
 	FilePdf,
@@ -195,7 +195,7 @@ impl Icon {
 		Icon::Copy,
 		Icon::Verified,
 		Icon::Calendar,
-		Icon::Aurora,
+		Icon::Strafe,
 		Icon::File,
 		Icon::FileImage,
 		Icon::FilePdf,
@@ -312,7 +312,7 @@ impl Icon {
 			Icon::Copy => "copy",
 			Icon::Verified => "seal-check",
 			Icon::Calendar => "calendar-blank",
-			Icon::Aurora => "serein-mark",
+			Icon::Strafe => "serein-mark",
 			Icon::File => "file",
 			Icon::FileImage => "file-image",
 			Icon::FilePdf => "file-pdf",

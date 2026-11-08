@@ -73,7 +73,7 @@ disable the Windows hack. Native DPI and eframe's physical surface sizing remain
 macOS/Linux window creation is unchanged.
 The custom Windows frame requests DWM's rounded-corner treatment on Windows 11. Windows keeps
 maximized windows square, and older releases ignore the unsupported preference.
-For offline inspection, run `cargo run --locked -p serein --features demo -- --demo --demo-rendering`.
+For offline inspection, run `cargo run --locked -p strafe --features demo -- --demo --demo-rendering`.
 The diagnostic shows the physical client size, logical viewport, native/egui scale and WGPU
 surface dimensions sampled by a render callback, plus alternating one-pixel stripes.
 The surface sample is from the previous paint: compare at rest after resizing, maximizing,

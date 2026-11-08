@@ -99,7 +99,7 @@ Setting transparency to zero disables blur and restores the native opaque-window
 hint where supported; only restarting with the Appearance switch off releases the
 alpha-capable GPU surface. X11 cannot change its native hint after window creation.
 The synthetic native preview can opt in without saved settings using
-`cargo run --locked -p serein --features demo -- --demo --demo-transparency`.
+`cargo run --locked -p strafe --features demo -- --demo --demo-transparency`.
 
 These metrics affect controls that inherit the shared native style. Custom
 painted elements, explicit text sizes, fixed-height rows and per-widget padding

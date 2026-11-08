@@ -1,4 +1,4 @@
-//! Aurora's opt-in diagnostic log.
+//! Strafe's opt-in diagnostic log.
 //!
 //! A record carries a compile-time category and label, numbers, and at most four fields whose text
 //! is a compile-time constant. Nothing in this API accepts an account, channel, message, path,
@@ -200,7 +200,7 @@ pub fn level() -> Level {
 	Level::from_code(sink().level.load(Ordering::Relaxed))
 }
 
-/// The fallback folder used when Aurora's own data folder cannot be written.
+/// The fallback folder used when Strafe's own data folder cannot be written.
 const FALLBACK_FOLDER: &str = "serein-logs";
 
 /// The folder a log uses when the app has no writable data folder at all.

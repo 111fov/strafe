@@ -29,9 +29,9 @@ Verification on the resolved source:
 
 ```sh
 cargo fmt --all -- --check
-cargo check --locked -p serein -p ui --all-targets --features serein/demo
-cargo test --locked -p serein -p ui -p client-core -p discord-api --features serein/demo --lib --bins typing
-cargo build --locked -p serein --features demo --bin serein
+cargo check --locked -p strafe -p ui --all-targets --features strafe/demo
+cargo test --locked -p strafe -p ui -p client-core -p discord-api --features strafe/demo --lib --bins typing
+cargo build --locked -p strafe --features demo --bin strafe
 ```
 
 All passed. The filtered suite contains 21 tests: seven client-core, one HTTP

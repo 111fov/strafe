@@ -27,7 +27,7 @@ Run the following from each worktree, using distinct build/output paths:
 
 ```powershell
 $env:CARGO_TARGET_DIR = 'E:/codex-builds/serein-review650-target'
-cargo build --release --locked -p serein --no-default-features --features demo --example profile_preview
+cargo build --release --locked -p strafe --no-default-features --features demo --example profile_preview
 $previewExe = "$env:CARGO_TARGET_DIR/release/examples/profile_preview.exe"
 & $previewExe --demo --page=embeds --width=1120 --height=900 --output=before.png
 & $previewExe --demo --page=embeds --width=1120 --height=900 --light --output=before-light.png

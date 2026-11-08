@@ -46,7 +46,7 @@ pub(super) fn show(
 	section(
 		ui,
 		"Navigation",
-		"Move around Aurora without reaching for the mouse.",
+		"Move around Strafe without reaching for the mouse.",
 		NAVIGATION,
 		bindings,
 		capturing,

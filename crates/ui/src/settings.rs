@@ -600,7 +600,7 @@ impl MessagingUi {
 				self.settings_logout(ui, state.demo);
 				ui.add_space(12.0);
 				ui.label(
-					RichText::new(format!("Aurora {}", self.build.version))
+					RichText::new(format!("Strafe {}", self.build.version))
 						.size(12.0)
 						.color(colors.muted),
 				);
@@ -886,7 +886,7 @@ impl MessagingUi {
 		let language = self.language;
 		#[cfg(target_os = "linux")]
 		{
-			// Hiding every decoration and drawing Aurora's own bar contradict each other:
+			// Hiding every decoration and drawing Strafe's own bar contradict each other:
 			// whichever switch was just turned on wins. The "no title bar" switch is at the
 			// bottom of this group, since it is only for tiling window managers.
 			let label = language.text("general-custom-title-bar");

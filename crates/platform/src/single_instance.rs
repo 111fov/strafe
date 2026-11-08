@@ -11,12 +11,12 @@ use std::sync::{
 	any(target_os = "windows", target_os = "linux"),
 	not(feature = "development-data")
 ))]
-const NAME: &str = "app.aurora.client";
+const NAME: &str = "app.strafe.client";
 #[cfg(all(
 	any(target_os = "windows", target_os = "linux"),
 	feature = "development-data"
 ))]
-const NAME: &str = "app.aurora.client.development";
+const NAME: &str = "app.strafe.client.development";
 
 pub enum Launch {
 	Primary(Instance),
@@ -303,7 +303,7 @@ mod macos {
 		// SAFETY: NSObject has no subclassing requirements. The handler stays on the main
 		// thread and is retained until it is unregistered on drop.
 		#[unsafe(super = NSObject)]
-		#[name = "AuroraReopenHandler"]
+		#[name = "StrafeReopenHandler"]
 		#[thread_kind = MainThreadOnly]
 		#[ivars = State]
 		struct Handler;

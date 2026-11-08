@@ -1175,7 +1175,7 @@ Old cached component markers acquire controls only after normal history refresh.
 Run the offline native component preview with:
 
 ```bash
-cargo run --locked -p serein --features demo -- --demo --demo-components
+cargo run --locked -p strafe --features demo -- --demo --demo-components
 ```
 
 Choose a dropdown option or click **Open sample form** to inspect the synthetic controls.
@@ -2466,7 +2466,7 @@ sender alongside games/custom status. The local profile previews Spotify when no
 Unlinking or disabling Spotify activity is detected on the next poll; service cooldowns apply.
 Track-end polls retain the previous activity while awaiting the next response, with a
 10–30 second request timeout instead of cancelling immediately at the old track deadline.
-The offline debug command is `cargo run --locked -p serein --features demo -- --demo --demo-check-spotify`.
+The offline debug command is `cargo run --locked -p strafe --features demo -- --demo --demo-check-spotify`.
 
 ### Outgoing message forwarding
 
@@ -2727,7 +2727,7 @@ the active history; a REST-only reload during an outage completes as stale rathe
 than leaving Refresh disabled in Loading.
 
 The offline debug command is
-`cargo run --locked -p serein --features demo -- --demo --demo-check-resume-send`.
+`cargo run --locked -p strafe --features demo -- --demo --demo-check-resume-send`.
 It exercises synthetic composer/Refresh/Reconnect input, disconnected sending,
 terminal auth and access gates, uncertain-write preservation and coalesced recovery
 waits without opening a network connection or audio device. Workspace tests also
@@ -2849,7 +2849,7 @@ GIF embeds and external GIFs with an admitted Discord media proxy. Shared HTTPS
 links may come from any host; this does not authorize fetching arbitrary origins.
 Previews still use the existing provider/Discord media admission and bounded
 pipeline. The original share URL, including attachment signatures, is retained.
-The offline debug check is `cargo run --locked -p serein --features demo --example gif_favorites`.
+The offline debug check is `cargo run --locked -p strafe --features demo --example gif_favorites`.
 
 ## Private profiles - October 15, 2026
 

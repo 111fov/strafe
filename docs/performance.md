@@ -1436,7 +1436,7 @@ these measurements cover the package directory and ZIP, not an installer binary.
 | Distribution ZIP | 49,970,177 B | 49,970,277 B | +100 B (+0.00020%) |
 
 For native idle samples, each source was also built with
-`cargo build --release --locked -p serein --no-default-features --features demo`
+`cargo build --release --locked -p strafe --no-default-features --features demo`
 and run with `--demo`.
 Both runs used the same 1120×760 synthetic fixture, Windows DPI 120 (125% scale),
 the default DX12 renderer and no child processes. After a 15-second warmup,

@@ -24,7 +24,7 @@ pub fn setup(
 		backend_policy(api, environment, wgpu::Instance::enabled_backend_features());
 	if api != GraphicsApi::Automatic && environment.is_none() && preferred.is_none() {
 		eprintln!(
-			"[Aurora] Preferred graphics API {} is unsupported by this build; using Automatic",
+			"[Strafe] Preferred graphics API {} is unsupported by this build; using Automatic",
 			api.label()
 		);
 	}
@@ -190,19 +190,19 @@ fn select(
 		&& info.backend != preferred
 	{
 		eprintln!(
-			"[Aurora] Preferred graphics API {preferred:?} cannot draw this window; using Automatic"
+			"[Strafe] Preferred graphics API {preferred:?} cannot draw this window; using Automatic"
 		);
 	}
-	eprintln!("[Aurora] GPU adapter: {}", describe(&info));
+	eprintln!("[Strafe] GPU adapter: {}", describe(&info));
 	if software(&info) {
 		// Already on OpenGL, the override has nothing left to try.
 		if info.backend == wgpu::Backend::Gl {
 			eprintln!(
-				"[Aurora] GPU adapter is a software OpenGL rasterizer; install the GPU's graphics driver"
+				"[Strafe] GPU adapter is a software OpenGL rasterizer; install the GPU's graphics driver"
 			);
 		} else {
 			eprintln!(
-				"[Aurora] GPU adapter is a software rasterizer; set WGPU_BACKEND=gl to try the GPU's OpenGL driver"
+				"[Strafe] GPU adapter is a software rasterizer; set WGPU_BACKEND=gl to try the GPU's OpenGL driver"
 			);
 		}
 	}

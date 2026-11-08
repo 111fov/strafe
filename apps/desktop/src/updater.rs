@@ -18,7 +18,11 @@ mod delta;
 #[path = "updater_install.rs"]
 mod install;
 
-const RELEASES: &str = "https://api.github.com/repos/ViceVerse-cz/Aurora/releases";
+const RELEASES: &str = "https://api.github.com/repos/ViceVerse-cz/Strafe/releases";
+/// Strafe is maintained from source. Offering upstream Serein releases here would silently
+/// replace this fork with a different app, so update checks are disabled until a real Strafe
+/// release channel exists.
+const UPDATES_ENABLED: bool = false;
 const MAX_METADATA: usize = 2 * 1024 * 1024;
 const MAX_DOWNLOAD: u64 = 512 * 1024 * 1024;
 const CHECK_INTERVAL: Duration = Duration::from_secs(60 * 60);
@@ -129,7 +133,7 @@ impl Updater {
 				self.demo_available = true;
 				view.log = demo_log();
 				self.status =
-					"Synthetic preview: Aurora 99.0.0 is available. No network request was made."
+					"Synthetic preview: Strafe 99.0.0 is available. No network request was made."
 						.into();
 			}
 			if download && self.demo_available {
@@ -204,27 +208,27 @@ impl Updater {
 							Ok(Outcome::Checked(package, log)) => {
 								self.log = Some(log);
 								self.status = package.as_ref().map_or_else(
-									|| "Aurora is up to date on this channel.".into(),
+									|| "Strafe is up to date on this channel.".into(),
 									|p| {
 										if install::flatpak_session() {
 											format!(
-												"Aurora {} is available. Update with `flatpak update` or your Software center.",
+												"Strafe {} is available. Update with `flatpak update` or your Software center.",
 												p.version,
 											)
 										} else if install::nix_session() {
 											format!(
-												"Aurora {} is available. Update it through Nix.",
+												"Strafe {} is available. Update it through Nix.",
 												p.version,
 											)
 										} else if let Some(cmd) =
 											install::linux_package_manager_update_command()
 										{
 											format!(
-												"Aurora {} is available. Run `{cmd}` to update.",
+												"Strafe {} is available. Run `{cmd}` to update.",
 												p.version,
 											)
 										} else {
-											format!("Aurora {} is available.", p.version)
+											format!("Strafe {} is available.", p.version)
 										}
 									},
 								);
@@ -243,7 +247,7 @@ impl Updater {
 								self.armed = true;
 								self.close_requested = true;
 								self.status =
-									"Update ready. Close Aurora to install and restart.".into();
+									"Update ready. Close Strafe to install and restart.".into();
 							}
 							Err(error) => {
 								self.auto_download = false;
@@ -307,7 +311,7 @@ impl Updater {
 					.expect("a supported platform's checked package has a downloadable archive")
 					.size;
 				self.auto_download = false;
-				self.status = format!("Downloading Aurora {}…", package.version);
+				self.status = format!("Downloading Strafe {}…", package.version);
 				self.start(runtime, ctx, total, move |cancel, progress| {
 					download_package(package, cancel, progress)
 				});
@@ -445,7 +449,7 @@ fn client() -> Result<reqwest::Client, String> {
 	reqwest::Client::builder()
 		.https_only(true)
 		.no_proxy()
-		.user_agent(concat!("Aurora/", env!("CARGO_PKG_VERSION")))
+		.user_agent(concat!("Strafe/", env!("CARGO_PKG_VERSION")))
 		.connect_timeout(Duration::from_secs(10))
 		.read_timeout(Duration::from_secs(30))
 		.timeout(Duration::from_secs(600))
@@ -691,7 +695,7 @@ fn select_release(
 			release.tag_name
 		);
 		if asset.browser_download_url != expected {
-			return Err("The asset is not from the Aurora release repository.".into());
+			return Err("The asset is not from the Strafe release repository.".into());
 		}
 		Ok(asset.clone())
 	};
@@ -716,6 +720,9 @@ async fn check_release(
 	nightly: bool,
 	cancel: Arc<AtomicBool>,
 ) -> Result<(Option<Package>, Vec<ui::updates::LogEntry>), String> {
+	if !UPDATES_ENABLED {
+		return Ok((None, Vec::new()));
+	}
 	let client = client()?;
 	let endpoint = if nightly {
 		format!("{RELEASES}?per_page=100")

@@ -55,7 +55,7 @@ body:
     attributes:
       label: Rust Backtrace / Crash Log
       description: |
-        Run Serein from the terminal with `RUST_BACKTRACE=1 serein` (or via `cargo run --bin serein`) and paste the complete panic backtrace or crash report here.
+        Run Serein from the terminal with `RUST_BACKTRACE=1 serein` (or via `cargo run --bin strafe`) and paste the complete panic backtrace or crash report here.
       render: shell
     validations:
       required: true

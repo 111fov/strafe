@@ -520,6 +520,9 @@ fn extension_fixture(
 		"teal-theme" => {
 			include_bytes!("../../../extensions/themes/teal.serein-extension")
 		}
+		"strafe" | "strafe-theme" => {
+			include_bytes!("../../../extensions/themes/strafe.serein-extension").as_slice()
+		}
 		_ => return Err("Unknown fixture extension".into()),
 	};
 	let package = extensions::parse_package(bytes)?;
@@ -799,7 +802,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let saved = Arc::new(AtomicBool::new(false));
 	let completed = saved.clone();
 	eframe::run_native(
-		"Aurora · offline profile preview",
+		"Strafe · offline profile preview",
 		eframe::NativeOptions {
 			viewport: egui::ViewportBuilder::default()
 				.with_inner_size([width, height])

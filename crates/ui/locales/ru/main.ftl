@@ -28,7 +28,7 @@ description-appearance = Тема, цвета, оконные эффекты и 
 description-chat = Как ведут себя сообщения, медиа, ссылки и прокрутка.
 description-messaging-permissions = Контролируйте, кто может связаться с вами и как фильтруются сообщения.
 description-notifications = Выберите, какие уведомления вы будете получать и как они будут отображаться.
-description-registered-games = Делитесь тем, во что играете, и исправляйте или добавляйте игры, найденные Aurora.
+description-registered-games = Делитесь тем, во что играете, и исправляйте или добавляйте игры, найденные Strafe.
 description-voice = Микрофон, динамики, камера и обработка голоса.
 description-keybinds = Сочетания клавиш для Серейн.
 description-storage = Что Серейн хранит на этом устройстве.
@@ -52,9 +52,9 @@ general-start-minimized-description = Начните в фоновом режи�
 general-startup-unavailable = Автоматический запуск доступен в Windows и macOS.
 general-window = Окно
 general-hide-decorations = Без заголовка окна
-general-hide-decorations-description = Для тайловых оконных менеджеров: убирает все заголовки и рамки, включая собственный заголовок Aurora. Перемещайте, изменяйте размер и закрывайте Aurora средствами оконного менеджера.
+general-hide-decorations-description = Для тайловых оконных менеджеров: убирает все заголовки и рамки, включая собственный заголовок Strafe. Перемещайте, изменяйте размер и закрывайте Strafe средствами оконного менеджера.
 general-custom-title-bar = Собственный заголовок окна
-general-custom-title-bar-description = Заменяет системную строку заголовка собственной панелью заголовка Aurora в стиле GTK 4.
+general-custom-title-bar-description = Заменяет системную строку заголовка собственной панелью заголовка Strafe в стиле GTK 4.
 general-hide-title-bar = Скрыть строку заголовка Серейн
 general-hide-title-bar-description = Вместо этого используйте системную строку заголовка и кнопки окна.
 general-keep-menu-bar = Держите Серейн в строке меню
@@ -68,7 +68,7 @@ general-render-with = Рендеринг с помощью
 general-gpu-restart = Изменение этого параметра вступает в силу после перезапуска.
 general-gpu-current-prefix = Сейчас активна
 general-steady-refresh-rate = Постоянная частота обновления
-general-steady-refresh-rate-description = Пока окно Aurora активно, отрисовка идёт с частотой обновления экрана, поэтому мониторы с переменной частотой обновления (VRR, G-SYNC, FreeSync) могут держать одну частоту и не мерцать. Расходует больше энергии.
+general-steady-refresh-rate-description = Пока окно Strafe активно, отрисовка идёт с частотой обновления экрана, поэтому мониторы с переменной частотой обновления (VRR, G-SYNC, FreeSync) могут держать одну частоту и не мерцать. Расходует больше энергии.
 gpu-automatic = Автоматический
 gpu-high-performance = Высокая производительность
 gpu-power-saving = Экономия энергии
@@ -1649,7 +1649,7 @@ main-sign-in-disclosures-about-serein = О Серейн
 # Context: sign_in_disclosures
 main-sign-in-disclosures-connect-with-this-token = Подключиться с помощью этого токена
 # Context: sign_in_disclosures
-main-sign-in-disclosures-for-owners-who-already-hold-a-valid-discord-session-token = Для владельцев, у которых уже есть действующий токен сеанса Discord, например, из другой установки Aurora, вошедшей в систему. Пароли и 2FA здесь никогда не используются; это полностью обходит размещенную страницу входа в Discord.
+main-sign-in-disclosures-for-owners-who-already-hold-a-valid-discord-session-token = Для владельцев, у которых уже есть действующий токен сеанса Discord, например, из другой установки Strafe, вошедшей в систему. Пароли и 2FA здесь никогда не используются; это полностью обходит размещенную страницу входа в Discord.
 # Context: sign_in_disclosures
 main-sign-in-disclosures-forget-saved-login = Забыть сохраненный логин
 # Context: sign_in_disclosures
@@ -3432,7 +3432,7 @@ settings-activity-added-games = Добавленные игры
 # Context: activity_settings
 settings-activity-no-games-added = Нет добавленных игр
 # Context: activity_settings
-settings-activity-hidden = Скрыто. Aurora не будет обнаруживать эту игру.
+settings-activity-hidden = Скрыто. Strafe не будет обнаруживать эту игру.
 # Context: activity_settings
 settings-activity-detected = Обнаружено автоматически
 # Context: activity_settings
@@ -3454,7 +3454,7 @@ settings-activity-click-to-rename = Нажмите, чтобы переимен�
 # Context: activity_settings
 settings-activity-add-a-game = Добавить игру
 # Context: activity_settings
-settings-activity-choose-program = Выберите запущенную программу. Aurora будет показывать её как вашу игру, когда она запущена.
+settings-activity-choose-program = Выберите запущенную программу. Strafe будет показывать её как вашу игру, когда она запущена.
 # Context: activity_settings
 settings-activity-search-programs = Поиск запущенных программ
 # Context: activity_settings
@@ -3519,11 +3519,11 @@ settings-storage-page-clear-cache = Очистить кэш
 # Context: storage_page
 settings-storage-page-local-storage = Локальное хранилище
 # Context: storage_page
-settings-storage-page-messages-and-drafts-are-cached-on-this-device-inside-bounded = Сообщения и черновики кэшируются на этом устройстве в ограниченных файлах, изолированных от учетной записи. Данные кэша не шифруются Aurora; сохраненные токены входа используют хранилище учетных данных ОС.
+settings-storage-page-messages-and-drafts-are-cached-on-this-device-inside-bounded = Сообщения и черновики кэшируются на этом устройстве в ограниченных файлах, изолированных от учетной записи. Данные кэша не шифруются Strafe; сохраненные токены входа используют хранилище учетных данных ОС.
 # Context: storage_page
 settings-storage-page-removes-cached-messages-and-media-drafts-and-your-login-stay = Удаляет кэшированные сообщения и медиа. Черновики и ваш логин остаются.
 # Context: storage_page
-settings-storage-page-serein-does-not-collect-telemetry-or-upload-diagnostics-discord-retains = Aurora не собирает телеметрию и не загружает диагностические данные. Discord сохраняет данные на стороне сервиса в соответствии со своей собственной политикой.
+settings-storage-page-serein-does-not-collect-telemetry-or-upload-diagnostics-discord-retains = Strafe не собирает телеметрию и не загружает диагностические данные. Discord сохраняет данные на стороне сервиса в соответствии со своей собственной политикой.
 # Context: storage_page
 settings-storage-page-your-privacy = Ваша конфиденциальность
 # Context: cosmetic_settings
@@ -4003,7 +4003,7 @@ updates-update-settings-release-channel = Ветка релизов
 # Context: update_settings
 updates-update-settings-restart-to-update = Перезапустите, чтобы обновить
 # Context: update_settings
-updates-update-settings-serein-was-installed-via-your-distribution-run-this-in-a = Aurora был установлен через пакетный менеджер. Используйте эту команду для обновления.
+updates-update-settings-serein-was-installed-via-your-distribution-run-this-in-a = Strafe был установлен через пакетный менеджер. Используйте эту команду для обновления.
 # Context: update_settings
 updates-update-settings-save-diagnostics = Сохранить диагностику
 # Context: update_settings
@@ -4025,7 +4025,7 @@ updates-update-settings-log-warnings = Ошибки и предупрежден�
 # Context: update_settings
 updates-update-settings-open-folder = Открыть папку
 # Context: update_settings
-updates-update-settings-the-log-folder-could-not-be-written = Не удалось записать папку журнала. Проверьте папку данных Aurora и повторите попытку.
+updates-update-settings-the-log-folder-could-not-be-written = Не удалось записать папку журнала. Проверьте папку данных Strafe и повторите попытку.
 # Context: update_settings
 updates-update-settings-timings-stages-and-failures-in-one-local-file-no-account-channel-or = Тайминги, этапы и сбои в одном локальном файле журнала. Данные аккаунта, каналов, сообщений и учётные данные не записываются, и ничего не отправляется.
 # Context: update_log
@@ -4482,7 +4482,7 @@ onboarding-rules-heading = Правила сервера
 # Context: rules
 onboarding-rules-review = Модератор проверит эти ответы, прежде чем вы сможете писать.
 # Context: field
-onboarding-field-unsupported = Сервер задаёт вопрос, который Aurora пока не умеет показывать. Завершите вступление в приложении Discord.
+onboarding-field-unsupported = Сервер задаёт вопрос, который Strafe пока не умеет показывать. Завершите вступление в приложении Discord.
 # Context: field
 onboarding-field-agree = Я прочитал(а) правила и согласен(на) с ними
 
@@ -4611,7 +4611,7 @@ reading-double-click-reaction = Double-click reaction
 
 ## crates/platform/src/app_menu.rs
 # Context: macos_menu_bar
-app-menu-about = О программе Aurora
+app-menu-about = О программе Strafe
 # Context: macos_menu_bar
 app-menu-updates = Проверить обновления…
 # Context: macos_menu_bar
@@ -4619,13 +4619,13 @@ app-menu-settings = Настройки…
 # Context: macos_menu_bar
 app-menu-services = Службы
 # Context: macos_menu_bar
-app-menu-hide = Скрыть Aurora
+app-menu-hide = Скрыть Strafe
 # Context: macos_menu_bar
 app-menu-hide-others = Скрыть остальные
 # Context: macos_menu_bar
 app-menu-show-all = Показать все
 # Context: macos_menu_bar
-app-menu-quit = Завершить Aurora
+app-menu-quit = Завершить Strafe
 # Context: macos_menu_bar
 app-menu-file = Файл
 # Context: macos_menu_bar
@@ -4667,7 +4667,7 @@ app-menu-bring-all-to-front = Все окна — на передний план
 # Context: macos_menu_bar
 app-menu-help = Справка
 # Context: macos_menu_bar
-app-menu-github = Aurora на GitHub
+app-menu-github = Strafe на GitHub
 # Context: macos_menu_bar
 app-menu-report-issue = Сообщить о проблеме…
 

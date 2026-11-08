@@ -9,8 +9,8 @@ nix run .#serein
 nix develop        # cargo, rustc and the native build inputs
 ```
 
-Linux installs `result/bin/serein`, a `cz.viceverse.serein.desktop` entry and icons.
-macOS installs `result/Applications/Serein.app` with `result/bin/serein` linking to
+Linux installs `result/bin/strafe`, a `cz.viceverse.serein.desktop` entry and icons.
+macOS installs `result/Applications/Serein.app` with `result/bin/strafe` linking to
 the bundle executable. Both include the notices, font/asset licenses and the
 corresponding MPL-2.0 hpke-rs source under `result/share/doc/serein` (inside the
 bundle `Resources` on macOS).

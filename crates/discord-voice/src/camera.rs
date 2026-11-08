@@ -399,7 +399,7 @@ mod macos {
 		time::{Duration, Instant},
 	};
 
-	const DENIED: &str = "Camera access denied. Allow Aurora (or your terminal) in System Settings > Privacy & Security > Camera, then try again.";
+	const DENIED: &str = "Camera access denied. Allow Strafe (or your terminal) in System Settings > Privacy & Security > Camera, then try again.";
 
 	pub(super) fn devices() -> Result<DeviceList, &'static str> {
 		// SAFETY: Framework-owned device types and discovery only; no stream or permission request.
@@ -445,10 +445,10 @@ mod macos {
 		// exact AVFoundation delegate signature. AVFoundation uses a serial queue.
 		#[unsafe(super = NSObject)]
 		#[ivars = DelegateState]
-		struct AuroraCameraDelegate;
+		struct StrafeCameraDelegate;
 
-		unsafe impl NSObjectProtocol for AuroraCameraDelegate {}
-		unsafe impl AVCaptureVideoDataOutputSampleBufferDelegate for AuroraCameraDelegate {
+		unsafe impl NSObjectProtocol for StrafeCameraDelegate {}
+		unsafe impl AVCaptureVideoDataOutputSampleBufferDelegate for StrafeCameraDelegate {
 			#[unsafe(method(captureOutput:didOutputSampleBuffer:fromConnection:))]
 			fn capture(
 				&self,
@@ -546,7 +546,7 @@ mod macos {
 	struct CaptureSession {
 		session: Retained<AVCaptureSession>,
 		output: Retained<AVCaptureVideoDataOutput>,
-		_delegate: Retained<AuroraCameraDelegate>,
+		_delegate: Retained<StrafeCameraDelegate>,
 		queue: DispatchRetained<DispatchQueue>,
 	}
 
@@ -673,12 +673,12 @@ mod macos {
 			);
 			output.setVideoSettings(Some(&settings));
 			output.setAlwaysDiscardsLateVideoFrames(true);
-			let allocated = AuroraCameraDelegate::alloc().set_ivars(DelegateState {
+			let allocated = StrafeCameraDelegate::alloc().set_ivars(DelegateState {
 				send,
 				shared: shared.clone(),
 				last: Mutex::new(Instant::now() - FRAME_INTERVAL),
 			});
-			let delegate: Retained<AuroraCameraDelegate> = msg_send![super(allocated), init];
+			let delegate: Retained<StrafeCameraDelegate> = msg_send![super(allocated), init];
 			output.setSampleBufferDelegate_queue(
 				Some(ProtocolObject::from_ref(&*delegate)),
 				Some(&queue),

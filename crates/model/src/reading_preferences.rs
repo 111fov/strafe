@@ -23,7 +23,7 @@ impl Default for ReadingPreferences {
 		Self {
 			zoom_percent: 100,
 			sidebar_width: 236,
-			// Aurora: start with the member list collapsed for a calmer, less cluttered view.
+			// Strafe: start with the member list collapsed for a calmer, less cluttered view.
 			show_members: false,
 			show_members_dms: false,
 			compact_messages: false,

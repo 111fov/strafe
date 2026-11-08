@@ -224,6 +224,8 @@ davey = { path = "vendor/davey" }
 wry = { path = "vendor/wry" }
 # Wayland image paste reads `image/png` through the focused surface; see vendor/smithay-clipboard/SEREIN-PATCH.md.
 smithay-clipboard = { path = "vendor/smithay-clipboard" }
+# ChromeOS/Crostini exports the physical XCURSOR_SIZE; prefer the logical low-density value.
+smithay-client-toolkit = { path = "vendor/smithay-client-toolkit" }
 
 [patch."https://github.com/emilk/egui"]
 # Windows window drags must not wait for a repaint per move; see vendor/egui-winit/SEREIN-PATCH.md.

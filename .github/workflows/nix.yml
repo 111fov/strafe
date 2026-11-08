@@ -48,7 +48,7 @@ jobs:
       - name: Build
         run: nix build --print-build-logs --show-trace .#serein
       - name: Verify installed binary
-        run: test -x result/bin/serein
+        run: test -x result/bin/strafe
       - name: Verify bundled notices and corresponding source
         shell: bash
         run: |

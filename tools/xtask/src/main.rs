@@ -224,7 +224,7 @@ fn package_windows(root: &std::path::Path) -> Result<(), String> {
 		println!(
 			"Windows installer created: {}",
 			installer_dir
-				.join(format!("serein-{version}-setup.exe"))
+				.join(format!("strafe-{version}-setup.exe"))
 				.display()
 		);
 	} else {
@@ -256,16 +256,16 @@ fn package() -> Result<(), String> {
 		"--release",
 		"--locked",
 		"-p",
-		"serein",
+		"strafe",
 		"--no-default-features",
 	];
 	run(&arguments)?;
 	let root = PathBuf::from("dist");
 	std::fs::create_dir_all(&root).map_err(|e| e.to_string())?;
 	let exe = if cfg!(windows) {
-		"serein.exe"
+		"strafe.exe"
 	} else {
-		"serein"
+		"strafe"
 	};
 	let destination = if cfg!(target_os = "macos") {
 		let app = root.join("Serein.app/Contents");
@@ -492,7 +492,7 @@ fn main() -> ExitCode {
 					])
 				})
 				.and_then(|_| run(&["test", "--workspace", "--locked"]))
-				.and_then(|_| run(&["check", "-p", "serein", "--no-default-features", "--locked"]))
+				.and_then(|_| run(&["check", "-p", "strafe", "--no-default-features", "--locked"]))
 				.and_then(|_| policy()),
 			"policy" => policy(),
 			"licenses" => licenses(),

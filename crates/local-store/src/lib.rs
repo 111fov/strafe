@@ -57,7 +57,7 @@ pub struct AppPreferences {
 	/// Keep the home list's message requests section collapsed after a restart.
 	pub message_requests_collapsed: bool,
 	pub hide_window_decorations: bool,
-	/// Linux: replace the system title bar with Aurora's own GTK 4 style header bar.
+	/// Linux: replace the system title bar with Strafe's own GTK 4 style header bar.
 	/// On by default, including for saved preferences from before the setting existed.
 	pub custom_title_bar: bool,
 	pub primary_color: Option<[u8; 3]>,
@@ -238,15 +238,15 @@ fn resolve_data_dir(configured: Option<OsString>, default: Option<PathBuf>) -> R
 	}
 }
 
-/// Keeps source-build data persistent but separate from installed Aurora data.
+/// Keeps source-build data persistent but separate from installed Strafe data.
 fn default_data_dir() -> Option<PathBuf> {
 	#[cfg(feature = "development-data")]
 	{
-		dirs::data_local_dir().map(|root| root.join("aurora-development"))
+		dirs::data_local_dir().map(|root| root.join("strafe-development"))
 	}
 	#[cfg(not(feature = "development-data"))]
 	{
-		dirs::data_local_dir().map(|root| root.join("aurora"))
+		dirs::data_local_dir().map(|root| root.join("strafe"))
 	}
 }
 
@@ -1705,7 +1705,7 @@ mod tests {
 			resolve_data_dir(None, Some(default.clone())),
 			Ok(default.clone())
 		);
-		let configured = default.join("aurora-development");
+		let configured = default.join("strafe-development");
 		assert_eq!(
 			resolve_data_dir(Some(configured.clone().into_os_string()), None),
 			Ok(configured)

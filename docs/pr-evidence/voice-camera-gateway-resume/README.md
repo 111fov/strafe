@@ -62,10 +62,10 @@ Use Rust 1.98.1 and the build settings above. In each checkout, set `CARGO_TARGE
 to its own directory, then run the same commands:
 
 ```sh
-cargo test --locked --offline -p serein --features demo --bin serein \
+cargo test --locked --offline -p strafe --features demo --bin strafe \
   camera_gateway_demo::tests::disconnected_gateway_retains_active_camera_but_blocks_new_activation \
   -- --exact --nocapture
-cargo build --locked --offline -p serein --features demo --bin serein
+cargo build --locked --offline -p strafe --features demo --bin strafe
 "$CARGO_TARGET_DIR/debug/serein" --demo --demo-check-camera-gateway
 "$CARGO_TARGET_DIR/debug/serein" --demo \
   --demo-camera-gateway-evidence=/absolute/path/to/capture.png

@@ -184,7 +184,7 @@ mod tests {
 	fn presence() -> CustomRichPresence {
 		CustomRichPresence {
 			application_id: "123456789".into(),
-			name: "Building Aurora".into(),
+			name: "Building Strafe".into(),
 			..Default::default()
 		}
 	}
@@ -277,7 +277,7 @@ mod tests {
 			id: "custom-rpc".into(),
 			name: "Custom RPC".into(),
 			version: "1.0.0".into(),
-			author: "Aurora".into(),
+			author: "Strafe".into(),
 			license: "MIT".into(),
 			source: "https://example.com".into(),
 			kind: ExtensionKind::Plugin,

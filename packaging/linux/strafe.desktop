@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Aurora
+Name=Strafe
 Comment=Experimental unofficial native Discord client
-Exec=serein
-Icon=serein
-StartupWMClass=app.aurora.client
+Exec=strafe
+Icon=strafe
+StartupWMClass=app.strafe.client
 Terminal=false
 Categories=Network;InstantMessaging;

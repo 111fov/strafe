@@ -6,7 +6,7 @@ use objc2_app_kit::{NSImage, NSMenu, NSMenuItem, NSStatusBar, NSStatusItem};
 use objc2_foundation::{MainThreadMarker, NSData, NSObject, NSObjectProtocol, NSSize, ns_string};
 use std::sync::Arc;
 
-/// Aurora's own mark, rasterized from `assets/brand/serein-mark.svg` as a menu bar template:
+/// Strafe's own mark, rasterized from `assets/brand/serein-mark.svg` as a menu bar template:
 /// only its alpha matters, so macOS tints it for light, dark and highlighted menu bars.
 const MARK: &[u8] = include_bytes!("../../../../assets/brand/serein-tray.png");
 /// Menu bar images are measured in points; the render is larger so Retina scales stay sharp.
@@ -22,7 +22,7 @@ define_class!(
 	// SAFETY: NSObject has no subclassing requirements. All state and callbacks stay on
 	// the main thread, and the target lives until every menu item is disconnected.
 	#[unsafe(super = NSObject)]
-	#[name = "AuroraTrayTarget"]
+	#[name = "StrafeTrayTarget"]
 	#[thread_kind = MainThreadOnly]
 	#[ivars = State]
 	struct Target;
@@ -31,12 +31,12 @@ define_class!(
 	unsafe impl NSObjectProtocol for Target {}
 
 	impl Target {
-		#[unsafe(method(showAurora:))]
+		#[unsafe(method(showStrafe:))]
 		fn show(&self, _sender: &NSMenuItem) {
 			self.emit(Event::Show);
 		}
 
-		#[unsafe(method(quitAurora:))]
+		#[unsafe(method(quitStrafe:))]
 		fn quit(&self, _sender: &NSMenuItem) {
 			self.emit(Event::Quit);
 		}
@@ -93,12 +93,12 @@ impl Tray {
 			image.setSize(NSSize::new(MARK_POINTS, MARK_POINTS));
 			button.setImage(Some(&image));
 		} else {
-			button.setTitle(ns_string!("Aurora"));
+			button.setTitle(ns_string!("Strafe"));
 		}
-		button.setToolTip(Some(ns_string!("Aurora")));
+		button.setToolTip(Some(ns_string!("Strafe")));
 		for (title, action) in [
-			(ns_string!("Show Aurora"), sel!(showAurora:)),
-			(ns_string!("Quit Aurora"), sel!(quitAurora:)),
+			(ns_string!("Show Strafe"), sel!(showStrafe:)),
+			(ns_string!("Quit Strafe"), sel!(quitStrafe:)),
 		] {
 			// SAFETY: both selectors are implemented above with the menu action signature.
 			// Tray retains their main-thread target until the menu is disconnected on drop.

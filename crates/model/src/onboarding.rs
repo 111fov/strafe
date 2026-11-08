@@ -134,7 +134,7 @@ impl Field {
 	}
 }
 impl Verification {
-	/// A form Aurora cannot answer completely (an unknown required question).
+	/// A form Strafe cannot answer completely (an unknown required question).
 	pub fn supported(&self) -> bool {
 		self.fields
 			.iter()

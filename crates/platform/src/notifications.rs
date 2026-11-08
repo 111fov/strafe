@@ -54,7 +54,7 @@ pub enum Status {
 impl Status {
 	pub fn label(self) -> &'static str {
 		match self {
-			Self::Disabled => "System notifications are off in Aurora settings.",
+			Self::Disabled => "System notifications are off in Strafe settings.",
 			Self::Enabling => "Checking system notification permission…",
 			Self::Ready => "",
 			Self::Denied => "System notifications are disabled in your OS settings.",
@@ -193,7 +193,7 @@ impl Notifications {
 	/// Queue a privacy-preserving generic alert. False means disabled, unavailable or overloaded.
 	pub fn notify(&self) -> bool {
 		self.enqueue(Alert {
-			title: "Aurora".into(),
+			title: "Strafe".into(),
 			body: GENERIC_BODY.into(),
 			image_path: None,
 		})
@@ -410,7 +410,7 @@ fn authorize() -> Status {
 	{
 		use windows::{UI::Notifications::ToastNotificationManager, core::HSTRING};
 		let notifier = ToastNotificationManager::CreateToastNotifierWithId(&HSTRING::from(
-			"app.aurora.client",
+			"app.strafe.client",
 		));
 		match notifier {
 			Ok(notifier) => windows_setting_status(notifier.Setting(), windows_shortcut_exists()),
@@ -466,7 +466,7 @@ fn windows_setting_status(
 fn windows_shortcut_exists() -> bool {
 	std::env::var_os("APPDATA").is_some_and(|root| {
 		std::path::PathBuf::from(root)
-			.join("Microsoft/Windows/Start Menu/Programs/Aurora.lnk")
+			.join("Microsoft/Windows/Start Menu/Programs/Strafe.lnk")
 			.is_file()
 	})
 }
@@ -518,7 +518,7 @@ fn show(alert: &Alert, activation: Activation) -> Result<NotificationHandle, ()>
 	#[cfg(target_os = "windows")]
 	{
 		use tauri_winrt_notification::{IconCrop, Toast};
-		let mut toast = Toast::new("app.aurora.client")
+		let mut toast = Toast::new("app.strafe.client")
 			.title(&alert.title)
 			.text1(&alert.body)
 			.on_activated(move |_| {
@@ -543,7 +543,7 @@ fn show(alert: &Alert, activation: Activation) -> Result<NotificationHandle, ()>
 fn notification(alert: &Alert) -> notify_rust::Notification {
 	let mut notification = notify_rust::Notification::new();
 	notification
-		.appname("Aurora")
+		.appname("Strafe")
 		.summary(&alert.title)
 		.body(&alert.body)
 		.timeout(5_000);
@@ -570,7 +570,7 @@ fn close(outstanding: &mut Option<NotificationHandle>) {
 	if outstanding.take().is_some() {
 		use windows::{UI::Notifications::ToastNotificationManager, core::HSTRING};
 		let _ = ToastNotificationManager::History()
-			.and_then(|history| history.ClearWithId(&HSTRING::from("app.aurora.client")));
+			.and_then(|history| history.ClearWithId(&HSTRING::from("app.strafe.client")));
 	}
 }
 
@@ -640,11 +640,11 @@ mod tests {
 	#[test]
 	fn disabled_is_lazy_and_fixed_queue_is_bounded_and_invalidated() {
 		let alert = notification(&Alert {
-			title: "Aurora".into(),
+			title: "Strafe".into(),
 			body: GENERIC_BODY.into(),
 			image_path: None,
 		});
-		assert_eq!(alert.summary, "Aurora");
+		assert_eq!(alert.summary, "Strafe");
 		assert_eq!(alert.body, "You have a new message.");
 		let mut notifications = Notifications::new(|| {}, || {});
 		assert_eq!(notifications.status(), Status::Disabled);

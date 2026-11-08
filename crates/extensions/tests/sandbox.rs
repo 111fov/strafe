@@ -7,7 +7,7 @@ fn plugin(wasm: &str) -> Package {
 			id: "test-plugin".into(),
 			name: "Test plugin".into(),
 			version: "1.0.0".into(),
-			author: "Aurora".into(),
+			author: "Strafe".into(),
 			license: "MIT".into(),
 			source: "https://github.com/example/plugin".into(),
 			kind: ExtensionKind::Plugin,

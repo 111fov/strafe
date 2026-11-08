@@ -577,7 +577,7 @@ fn main() -> eframe::Result {
 				)
 				.with_min_inner_size(app_settings::MIN_WINDOW_SIZE.map(|size| size as f32))
 				.with_active(!start_minimized)
-				.with_app_id("app.aurora.client");
+				.with_app_id("app.strafe.client");
 			#[cfg(any(target_os = "windows", target_os = "linux"))]
 			let builder = builder
 				.with_icon(eframe::icon_data::from_png_bytes(icon).expect("bundled app icon"));
@@ -618,7 +618,7 @@ fn main() -> eframe::Result {
 		..Default::default()
 	};
 	let result = eframe::run_native(
-		"Aurora",
+		"Strafe",
 		options,
 		Box::new(move |cc| {
 			let mut desktop =
@@ -645,7 +645,7 @@ fn main() -> eframe::Result {
 	// Quitting mid-share drops media workers that are still closing their encoders, and
 	// NVIDIA's exit handlers crash or deadlock if the process exits during that teardown.
 	if !discord_voice::wait_for_media_threads(std::time::Duration::from_secs(5)) {
-		eprintln!("Screen or camera capture was still closing when Aurora exited.");
+		eprintln!("Screen or camera capture was still closing when Strafe exited.");
 	}
 	result
 }
@@ -978,7 +978,7 @@ impl Drop for FrameMetrics {
 			let _ = writeln!(
 				std::io::stderr(),
 				// Preserve the legacy diagnostic label; elapsed callback time is wall time.
-				"[Aurora frames] callbacks={} without_input={} cpu_us_buckets(1000,2000,4000,8000,16000,32000,64000,above)={:?} reflows(total,consecutive)={:?}",
+				"[Strafe frames] callbacks={} without_input={} cpu_us_buckets(1000,2000,4000,8000,16000,32000,64000,above)={:?} reflows(total,consecutive)={:?}",
 				self.frames,
 				self.inputless,
 				self.buckets,
@@ -2635,7 +2635,7 @@ impl Desktop {
 	fn diagnostics_report(&self, ctx: &egui::Context) -> String {
 		use std::fmt::Write;
 		let mut report = String::with_capacity(24 * 1024);
-		report.push_str("# Aurora diagnostics\n\n");
+		report.push_str("# Strafe diagnostics\n\n");
 		report.push_str(&self.messaging.diagnostic_info(ctx));
 		report.push('\n');
 		let log_file = diagnostics::path()
@@ -3057,7 +3057,7 @@ impl Desktop {
 			}
 		}
 	}
-	/// Whether closing may keep Aurora running without a window. macOS apps stay in the Dock
+	/// Whether closing may keep Strafe running without a window. macOS apps stay in the Dock
 	/// until quit, and the Dock icon reopens the window.
 	fn background_available(&self) -> bool {
 		cfg!(target_os = "macos") || self.tray_available()
@@ -4714,14 +4714,14 @@ impl Desktop {
 						if self.messaging.custom_font.busy && self.font_picker.is_none() {
 							self.messaging.custom_font.busy = false;
 							self.messaging.custom_font.status =
-								"Local storage worker stopped. Restart Aurora to save fonts.";
+								"Local storage worker stopped. Restart Strafe to save fonts.";
 						}
 						if self.messaging.channel_preferences_reload
 							|| self.messaging.channel_preferences_load_pending
 						{
 							self.messaging.channel_preferences_reload = false;
 							self.messaging.channel_preferences_load_pending = false;
-							self.messaging.channel_preferences_status = "Local storage worker stopped; restart Aurora to restore channel preferences.";
+							self.messaging.channel_preferences_status = "Local storage worker stopped; restart Strafe to restore channel preferences.";
 						}
 						presence_cache_stopped = self.presence_load_pending;
 						break;
@@ -5064,7 +5064,7 @@ impl Desktop {
 					if result.is_err() {
 						self.messaging.toasts.push(
 							ui::design::Level::Error,
-							"Could not delete the plaintext saved logins in Aurora's data folder",
+							"Could not delete the plaintext saved logins in Strafe's data folder",
 						);
 					} else if !enabled {
 						self.credential_status = "Plaintext saved logins deleted";
@@ -5077,7 +5077,7 @@ impl Desktop {
 						// Nothing could have been saved without a credential store.
 						Err(platform::CredentialError::NoStore) => "",
 						Err(_) => {
-							"Could not remove the Aurora saved login in your OS credential manager"
+							"Could not remove the Strafe saved login in your OS credential manager"
 						}
 					};
 				}
@@ -5393,7 +5393,7 @@ impl Desktop {
 					// One extra fixed-label terminal line per enabled scope; closed stderr is OK.
 					let _ = writeln!(
 						std::io::stderr(),
-						"[Aurora {scope}] Session stopped: {}",
+						"[Strafe {scope}] Session stopped: {}",
 						failure.label()
 					);
 				}
@@ -6317,7 +6317,7 @@ impl eframe::App for Desktop {
 						ui.painter().rect_filled(rect, 8, p.accent);
 						ui::icons::paint(
 							ui.painter(),
-							ui::icons::Icon::Aurora,
+							ui::icons::Icon::Strafe,
 							rect.shrink(7.0),
 							p.accent_text,
 						);

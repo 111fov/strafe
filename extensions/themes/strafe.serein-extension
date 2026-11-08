@@ -1,8 +1,8 @@
 {
   "manifest": {
     "api_version": 1,
-    "id": "aurora",
-    "name": "Aurora",
+    "id": "strafe",
+    "name": "Strafe",
     "version": "1.0.0",
     "author": "local",
     "license": "MIT",
