@@ -23,6 +23,12 @@ pub struct DeviceList {
 	pub inputs: Vec<(String, String)>,
 	pub outputs: Vec<(String, String)>,
 }
+/// PulseAudio/PipeWire expose each sink's loopback as an input named "Monitor of …".
+/// It is not a microphone; offering it makes the list confusing and captures silence
+/// until something plays. Keep real capture devices only.
+fn is_monitor_source(id: &str, name: &str) -> bool {
+	name.starts_with("Monitor of ") || id.ends_with(".monitor")
+}
 pub fn devices() -> Result<DeviceList, &'static str> {
 	let host = cpal::default_host();
 	let mut list = DeviceList {
@@ -42,7 +48,7 @@ pub fn devices() -> Result<DeviceList, &'static str> {
 			continue;
 		}
 		let name: String = device.to_string().chars().take(128).collect();
-		if device.supports_input() && list.inputs.len() < 32 {
+		if device.supports_input() && !is_monitor_source(&id, &name) && list.inputs.len() < 32 {
 			list.inputs.push((id.clone(), name.clone()));
 		}
 		if device.supports_output() && list.outputs.len() < 32 {
@@ -1249,6 +1255,19 @@ mod tests {
 			thread: std::thread::current(),
 			done: None,
 		}
+	}
+
+	#[test]
+	fn monitor_loopback_sources_are_not_microphones() {
+		assert!(is_monitor_source(
+			"alsa_output.pci-0000_00_09.0.stereo-fallback.monitor",
+			"Monitor of Virtio 1.0 sound Stereo"
+		));
+		assert!(is_monitor_source("whatever.monitor", "Virtio 1.0 sound Stereo"));
+		assert!(!is_monitor_source(
+			"alsa_input.pci-0000_00_09.0.stereo-fallback",
+			"Virtio 1.0 sound Stereo"
+		));
 	}
 
 	#[test]

@@ -2486,6 +2486,14 @@ impl MessagingUi {
 					.color(colors.muted),
 			);
 		}
+		if (self.voice_preview_requested || active)
+			&& self.voice_preview_level.is_some_and(|db| db <= -60.0)
+		{
+			design::hint(
+				ui,
+				"No microphone signal. Check that your system grants microphone access to Strafe.",
+			);
+		}
 	}
 
 	pub(super) fn voice_settings_content(

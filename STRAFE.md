@@ -57,3 +57,14 @@ Strafe wording. Protocol, voice and rendering fixes should be accepted from upst
 - This is an unofficial client. Automating a normal account outside Discord's OAuth2/bot API
   violates Discord's Terms of Service and carries a risk of account termination.
 - Voice, screen sharing and camera capture depend on the platform and are tested on Linux/Wayland first.
+
+### ChromeOS/Crostini audio
+
+Crostini exposes one virtual sound card (`Virtio 1.0 sound Stereo`). ChromeOS chooses whether that
+goes to the built-in speakers, the headphone jack or Bluetooth; Linux never sees those as separate
+devices, so the picker cannot list “Headphones” inside the container.
+
+Microphone access is a ChromeOS permission. If the mic meter stays at -100 dBFS while you speak,
+open ChromeOS Settings → About ChromeOS → Developers → Linux development environment and enable
+**Microphone**, then restart Strafe. The capture source exists either way, but ChromeOS feeds it
+silence until the permission is on.

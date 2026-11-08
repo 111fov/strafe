@@ -47,12 +47,12 @@ fn main() {
 		.expect("device worker completes")
 		.expect("native enumeration succeeds");
 	println!("Microphones: {}", devices.inputs.len());
-	for (_, name) in &devices.inputs {
-		println!("  {name}");
+	for (id, name) in &devices.inputs {
+		println!("  {id} = {name}");
 	}
 	println!("Speakers: {}", devices.outputs.len());
-	for (_, name) in &devices.outputs {
-		println!("  {name}");
+	for (id, name) in &devices.outputs {
+		println!("  {id} = {name}");
 	}
 	messaging.voice_inputs = devices.inputs;
 	messaging.voice_outputs = devices.outputs;
