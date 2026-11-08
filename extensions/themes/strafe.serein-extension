@@ -57,7 +57,7 @@
       }
     },
     "style": {
-      "transparency_blur": false,
+      "transparency_blur": true,
       "body_size": 15,
       "heading_size": 20,
       "button_size": 14,

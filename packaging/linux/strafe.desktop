@@ -4,6 +4,6 @@ Name=Strafe
 Comment=Experimental unofficial native Discord client
 Exec=strafe
 Icon=strafe
-StartupWMClass=app.strafe.client
+StartupWMClass=strafe
 Terminal=false
 Categories=Network;InstantMessaging;

@@ -24,7 +24,19 @@ Comment=Native Discord client
 Exec=${PREFIX}/bin/strafe
 TryExec=${PREFIX}/bin/strafe
 Icon=${ICONS}/256x256/apps/strafe.png
-StartupWMClass=app.strafe.client
+StartupWMClass=strafe
+Terminal=false
+Categories=Network;InstantMessaging;
+EOF
+
+cat > "${APPS}/app.strafe.client.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Strafe
+NoDisplay=true
+Exec=${PREFIX}/bin/strafe
+Icon=${ICONS}/256x256/apps/strafe.png
+StartupWMClass=strafe
 Terminal=false
 Categories=Network;InstantMessaging;
 EOF
@@ -39,4 +51,4 @@ gtk-update-icon-cache -f -t "$ICONS" >/dev/null 2>&1 || true
 update-desktop-database "$APPS" >/dev/null 2>&1 || true
 
 echo "Installed Strafe to ${PREFIX}/bin/strafe"
-echo "Launcher: ${APPS}/app.strafe.client.desktop"
+echo "Launcher: ${APPS}/strafe.desktop"

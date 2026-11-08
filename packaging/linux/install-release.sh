@@ -18,6 +18,18 @@ sed -i -e "s|^Exec=.*|Exec=${PREFIX}/bin/strafe|" \
     -e "s|^Icon=.*|Icon=${ICONS}/256x256/apps/strafe.png|" \
     "${APPS}/strafe.desktop"
 
+cat > "${APPS}/app.strafe.client.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Strafe
+NoDisplay=true
+Exec=${PREFIX}/bin/strafe
+Icon=${ICONS}/256x256/apps/strafe.png
+StartupWMClass=strafe
+Terminal=false
+Categories=Network;InstantMessaging;
+EOF
+
 for source in icons/hicolor/*/apps/strafe.png; do
     [ -f "$source" ] || continue
     size=$(basename "$(dirname "$(dirname "$source")")")
