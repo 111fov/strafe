@@ -1027,9 +1027,9 @@ pub fn presence_label(status: &str) -> String {
 }
 pub(crate) fn presence_color(status: &str) -> Color32 {
 	match status {
-		"online" => Color32::from_rgb(35, 165, 89),
-		"idle" => Color32::from_rgb(240, 178, 50),
-		"dnd" => Color32::from_rgb(242, 63, 67),
+		"online" => Color32::from_rgb(0x28, 0xc8, 0x40),
+		"idle" => Color32::from_rgb(0xfe, 0xbc, 0x2e),
+		"dnd" => Color32::from_rgb(0xff, 0x5f, 0x57),
 		_ => Color32::from_rgb(128, 132, 142),
 	}
 }
