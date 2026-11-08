@@ -601,7 +601,7 @@ impl Themes {
             ThemeSpec::Named { name, size } => (name.into(), size),
             ThemeSpec::System => {
                 let name = env::var("XCURSOR_THEME").ok().unwrap_or_else(|| "default".into());
-                // ChromeOS/Crostini exports the physical cursor size in XCURSOR_SIZE and
+                // Some environments export the physical cursor size in XCURSOR_SIZE and
                 // the logical size in XCURSOR_SIZE_LOW_DENSITY. The theme loaded below is
                 // multiplied by the output scale, so prefer the logical size when present;
                 // otherwise a scale-2 output draws a double-size pointer.
