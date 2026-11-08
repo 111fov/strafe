@@ -51,6 +51,29 @@ To change it live, edit the package, then replace the copy installed under
 the package with its hash) and restart Strafe. Radius, spacing, typography and colors are
 documented in [`docs/theme-api.md`](theme-api.md).
 
+## Releasing
+
+1. Bump `version` in the root `Cargo.toml` (`[workspace.package]`).
+2. Tag and push:
+
+   ```sh
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+GitHub Actions builds and publishes:
+
+- `strafe-vX.Y.Z-linux-x86_64.tar.gz` — binary, desktop entry, icons and `install.sh`
+- `strafe-vX.Y.Z-windows-x64.zip` — `strafe.exe`, portable launcher, notification helper and docs
+- `SHA256SUMS.txt`
+
+The release workflow lives in `.github/workflows/release.yml`. It builds with
+`--no-default-features`, so release installs use `~/.local/share/strafe` and the normal keyring
+account rather than the development profile.
+
+Builds are unsigned: Windows SmartScreen may warn on first launch, and the Windows portable archive
+needs `install-notifications.ps1` to register its Start Menu shortcut for toast notifications.
+
 ## Keeping up with upstream
 
 ```sh

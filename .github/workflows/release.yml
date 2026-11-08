@@ -1,208 +1,112 @@
 name: Release
-run-name: ${{ inputs.channel || 'nightly' }} release by @${{ github.actor }}
 
 on:
-  schedule:
-    - cron: '17 3 * * *'
+  push:
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
-      channel:
-        description: Release channel
-        type: choice
-        options: [nightly, production]
-        default: nightly
+      tag:
+        description: "Existing tag to release (for example v0.1.0)"
         required: true
+        type: string
+
+concurrency:
+  group: strafe-release
+  cancel-in-progress: false
 
 permissions:
   contents: read
 
 env:
-  RELEASE_CHANNEL: ${{ inputs.channel || 'nightly' }}
-
-concurrency:
-  group: serein-release
-  cancel-in-progress: false
+  RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      release: ${{ steps.version.outputs.release }}
-      tag: ${{ steps.version.outputs.tag }}
-      version: ${{ steps.version.outputs.version }}
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: oven-sh/setup-bun@v2.2.0
-        with:
-          bun-version: 1.4.2
-      - run: bun install --cwd .github/release --frozen-lockfile --ignore-scripts
-      - run: bun .github/release/check.mjs
-      - name: Calculate semantic version and notes
-        id: version
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: bun .github/release/release.mjs plan
-      - name: Require Mac signing credentials before building
-        if: steps.version.outputs.release == 'true'
-        env:
-          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
-          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
-          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-        run: |
-          for name in MACOS_CERTIFICATE_BASE64 MACOS_CERTIFICATE_PASSWORD MACOS_SIGNING_IDENTITY APPLE_ID APPLE_TEAM_ID APPLE_APP_SPECIFIC_PASSWORD; do
-            test -n "${!name}" || { echo "Missing Actions secret: $name"; exit 1; }
-          done
-      - name: Apply planned version to manifests
-        if: steps.version.outputs.release == 'true'
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: python3 .github/release/version.py "$VERSION"
-      - uses: actions/upload-artifact@v7.0.1
-        if: steps.version.outputs.release == 'true'
-        with:
-          name: release-manifests
-          path: |
-            Cargo.toml
-            Cargo.lock
-            fuzz/Cargo.lock
-            packaging/macos/Info.plist
-            target/release-plan.json
-          if-no-files-found: error
-          retention-days: 14
-
-  build:
-    needs: prepare
-    if: needs.prepare.outputs.release == 'true'
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, windows-latest, windows-11-arm]
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
-    env:
-      TAG: ${{ needs.prepare.outputs.tag }}
-      VERSION: ${{ needs.prepare.outputs.version }}
-      PACKAGE_ROOT: dist
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: release-manifests
-          path: .
+          ref: ${{ github.event.inputs.tag || github.ref }}
+      - name: Install native build dependencies
+        run: sudo sh packaging/linux/install-build-deps.sh
       - uses: dtolnay/rust-toolchain@1.98.1
-        with:
-          components: rustfmt, clippy
-      - name: Install NSIS
-        if: runner.os == 'Windows'
-        run: choco install nsis --no-progress -y
-      - name: Offline checks
-        run: cargo xtask check
-      - uses: oven-sh/setup-bun@v2.2.0
-        with:
-          bun-version: 1.4.2
-      - run: bun tests/login-handoff.cjs
-      - name: Package app
+      - uses: Swatinem/rust-cache@v2.9.2
+      - name: Build release binary
+        run: cargo build --release --locked --no-default-features
+      - name: Package Linux archive
         run: |
-          cargo xtask package
-          mkdir release-assets
-          echo "ASSET=serein-$TAG-$RUNNER_OS-$RUNNER_ARCH" >> "$GITHUB_ENV"
-      - name: Sign, notarize and verify Mac app
-        if: runner.os == 'macOS'
-        env:
-          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
-          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
-          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-        run: bash packaging/macos/sign-release.sh "$PACKAGE_ROOT/Serein.app"
-      - name: Archive Mac package
-        if: runner.os == 'macOS'
-        run: ditto -c -k --sequesterRsrc "$PACKAGE_ROOT" "release-assets/$ASSET.zip"
-      - name: Archive Windows package
-        if: runner.os == 'Windows'
+          set -euo pipefail
+          TAG="${RELEASE_TAG}"
+          NAME="strafe-${TAG}-linux-x86_64"
+          ROOT="release/${NAME}"
+          mkdir -p "${ROOT}/icons/hicolor"
+          cp target/release/strafe "${ROOT}/strafe"
+          cp packaging/linux/strafe.desktop "${ROOT}/strafe.desktop"
+          for size in 16 22 24 32 48 64 128 256 512 1024; do
+            mkdir -p "${ROOT}/icons/hicolor/${size}x${size}/apps"
+            cp "packaging/linux/hicolor/${size}x${size}/apps/serein.png" \
+              "${ROOT}/icons/hicolor/${size}x${size}/apps/strafe.png"
+          done
+          mkdir -p "${ROOT}/icons/hicolor/scalable/apps"
+          cp assets/brand/serein.svg "${ROOT}/icons/hicolor/scalable/apps/strafe.svg"
+          cp packaging/linux/install-release.sh "${ROOT}/install.sh"
+          chmod +x "${ROOT}/install.sh"
+          cp README.md LICENSE-MIT LICENSE-APACHE THIRD_PARTY_NOTICES.md "${ROOT}/"
+          tar -C release -czf "release/${NAME}.tar.gz" "${NAME}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          path: release/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+      - uses: dtolnay/rust-toolchain@1.98.1
+      - uses: Swatinem/rust-cache@v2.9.2
+      - name: Build release binary
+        shell: bash
+        run: cargo build --release --locked --no-default-features
+      - name: Package Windows archive
         shell: pwsh
         run: |
-          Compress-Archive -Path "$env:PACKAGE_ROOT/*" -DestinationPath "release-assets/$env:ASSET.zip"
-          $installer = Get-ChildItem -Path "dist-installer/*-setup.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
-          if ($installer) {
-            Copy-Item -LiteralPath $installer.FullName -Destination "release-assets/$env:ASSET-Setup.exe"
-          }
-      - uses: actions/upload-artifact@v7.0.1
+          $tag = $env:RELEASE_TAG
+          $name = "strafe-$tag-windows-x64"
+          New-Item -ItemType Directory -Force "release/$name" | Out-Null
+          Copy-Item "target/release/strafe.exe" "release/$name/"
+          Copy-Item README.md, LICENSE-MIT, LICENSE-APACHE, THIRD_PARTY_NOTICES.md "release/$name/"
+          Copy-Item "packaging/windows/install-notifications.ps1" "release/$name/"
+          Copy-Item "packaging/windows/strafe-portable.cmd" "release/$name/"
+          Compress-Archive -Path "release/$name/*" -DestinationPath "release/$name.zip"
+      - uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ASSET }}
-          path: release-assets/*
+          name: windows-release
+          path: release/*.zip
           if-no-files-found: error
-          retention-days: 14
-
-  linux:
-    needs: prepare
-    if: needs.prepare.outputs.release == 'true'
-    uses: ./.github/workflows/linux-packages.yml
-    with:
-      release: true
-      tag: ${{ needs.prepare.outputs.tag }}
 
   publish:
-    needs: [prepare, build, linux]
+    needs: [linux, windows]
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      GH_TOKEN: ${{ github.token }}
-      GH_REPO: ${{ github.repository }}
-      TAG: ${{ needs.prepare.outputs.tag }}
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/download-artifact@v4
         with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: oven-sh/setup-bun@v2.2.0
-        with:
-          bun-version: 1.4.2
-      - run: bun install --cwd .github/release --frozen-lockfile --ignore-scripts
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: release-manifests
-          path: .
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          pattern: serein-*
-          path: release-assets
+          pattern: "*-release"
+          path: release
           merge-multiple: true
       - name: Checksums
-        working-directory: release-assets
-        run: sha256sum ./* > SHA256SUMS.txt
-      - name: Commit versions and publish semantic release with notes and assets
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-        run: bun .github/release/release.mjs publish
-
-  repositories:
-    needs: [prepare, build, linux, publish]
-    if: needs.prepare.outputs.release == 'true'
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    uses: ./.github/workflows/package-repositories.yml
-    with:
-      tag: ${{ needs.prepare.outputs.tag }}
-      channel: ${{ inputs.channel || 'nightly' }}
-      base_url: https://viceverse-cz.github.io/Serein
-      deploy: true
-    secrets: inherit
+        working-directory: release
+        run: sha256sum ./*.tar.gz ./*.zip > SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          name: Strafe ${{ github.event.inputs.tag || github.ref_name }}
+          files: release/*
+          generate_release_notes: true
+          fail_on_unmatched_files: true
