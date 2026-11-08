@@ -1,0 +1,74 @@
+{
+  "manifest": {
+    "api_version": 1,
+    "id": "aurora",
+    "name": "Aurora",
+    "version": "1.0.0",
+    "author": "local",
+    "license": "MIT",
+    "source": "",
+    "kind": "theme",
+    "capabilities": [],
+    "actions": []
+  },
+  "theme": {
+    "dark": {
+      "colors": {
+        "base": "#1b1c1e",
+        "sidebar": "#26272a",
+        "chat": "#2f3034",
+        "raised": "#3a3b40",
+        "hover": "#404146",
+        "selected": "#4a4b52",
+        "border": "#202124",
+        "text_strong": "#f2f3f5",
+        "text": "#dbdee1",
+        "muted": "#9aa0a8",
+        "accent": "#5865f2",
+        "accent_text": "#ffffff",
+        "link": "#00a8fc",
+        "mention_bg": "#3c4270",
+        "mention_text": "#e0e2ff",
+        "positive": "#23a55a",
+        "warning": "#f0b232",
+        "danger": "#f23f43"
+      }
+    },
+    "light": {
+      "colors": {
+        "base": "#f2f3f5",
+        "sidebar": "#e9eaec",
+        "chat": "#ffffff",
+        "raised": "#f5f6f7",
+        "hover": "#eceef0",
+        "selected": "#dfe1e5",
+        "border": "#e0e2e6",
+        "text_strong": "#060607",
+        "text": "#313338",
+        "muted": "#5c5e66",
+        "accent": "#5865f2",
+        "accent_text": "#ffffff",
+        "link": "#006ce7",
+        "mention_bg": "#e7e9fd",
+        "mention_text": "#3c4270",
+        "positive": "#248046",
+        "warning": "#a86f00",
+        "danger": "#da373c"
+      }
+    },
+    "style": {
+      "transparency_blur": false,
+      "body_size": 15,
+      "heading_size": 20,
+      "button_size": 14,
+      "small_size": 12,
+      "monospace_size": 14,
+      "item_spacing": [6, 6],
+      "button_padding": [12, 7],
+      "control_height": 34,
+      "widget_radius": 14,
+      "window_radius": 16,
+      "menu_radius": 14
+    }
+  }
+}
