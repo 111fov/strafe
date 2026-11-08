@@ -6311,7 +6311,13 @@ impl eframe::App for Desktop {
 				.show(ui, |ui| {
 					ui::design::window_drag(ui, ui.max_rect());
 					ui.horizontal_centered(|ui| {
-						ui.add_space(self.traffic_light_inset());
+						if self.messaging.uses_custom_title_bar() {
+							ui.add_space(12.0);
+							ui::design::traffic_lights(ui);
+							ui.add_space(12.0);
+						} else {
+							ui.add_space(self.traffic_light_inset());
+						}
 						let (rect, _) =
 							ui.allocate_exact_size(egui::vec2(32.0, 32.0), egui::Sense::hover());
 						ui.painter().rect_filled(rect, 8, p.accent);

@@ -360,15 +360,33 @@ impl Desktop {
 			.frame(egui::Frame::NONE.fill(ui::design::window_palette(ui).canvas))
 			.show(ui, |ui| {
 				ui::design::window_drag(ui, ui.max_rect());
+				if self.messaging.uses_custom_title_bar() {
+					let rect = ui.max_rect();
+					ui.scope_builder(
+						egui::UiBuilder::new()
+							.max_rect(egui::Rect::from_min_size(
+								egui::pos2(rect.left() + 12.0, rect.top() + 8.0),
+								egui::vec2(64.0, 24.0),
+							))
+							.layout(egui::Layout::left_to_right(egui::Align::Center)),
+						|ui| ui::design::traffic_lights(ui),
+					);
+				}
 				egui::Frame::NONE
 					.inner_margin(egui::Margin {
-						left: (16.0 + self.traffic_light_inset()) as i8,
+						left: if self.messaging.uses_custom_title_bar() {
+							16
+						} else {
+							(16.0 + self.traffic_light_inset()) as i8
+						},
 						right: if ui::design::WINDOW_CONTROLS_WIDTH > 0.0 {
 							0
 						} else {
 							16
 						},
-						top: if ui::design::WINDOW_CONTROLS_WIDTH > 0.0 {
+						top: if self.messaging.uses_custom_title_bar() {
+							40
+						} else if ui::design::WINDOW_CONTROLS_WIDTH > 0.0 {
 							0
 						} else {
 							16
@@ -466,7 +484,9 @@ impl Desktop {
 			});
 	}
 	pub(super) fn traffic_light_inset(&self) -> f32 {
-		if self.messaging.hide_title_bar {
+		if self.messaging.hide_title_bar
+			|| (cfg!(target_os = "linux") && !self.messaging.uses_custom_title_bar())
+		{
 			0.0
 		} else {
 			ui::design::TRAFFIC_LIGHT_INSET
@@ -485,7 +505,13 @@ impl Desktop {
 						// Drag first: later widgets win hit testing, so the header buttons stay clickable.
 						ui::design::window_drag(ui, ui.max_rect());
 						ui.horizontal_centered(|ui| {
-							ui.add_space(16.0 + self.traffic_light_inset());
+							if self.messaging.uses_custom_title_bar() {
+								ui.add_space(12.0);
+								ui::design::traffic_lights(ui);
+								ui.add_space(12.0);
+							} else {
+								ui.add_space(16.0 + self.traffic_light_inset());
+							}
 							app_mark(ui, 20.0);
 							ui.add_space(8.0);
 							ui.label(

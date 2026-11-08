@@ -1418,6 +1418,24 @@ impl MessagingUi {
 				ui.style_mut().interaction.selectable_labels = false;
 				let rect = ui.max_rect();
 				design::window_drag(ui, rect);
+				let traffic_inset = if cfg!(target_os = "macos")
+					|| self.uses_custom_title_bar()
+				{
+					design::TRAFFIC_LIGHT_INSET
+				} else {
+					0.0
+				};
+				if self.uses_custom_title_bar() {
+					ui.scope_builder(
+						egui::UiBuilder::new()
+							.max_rect(egui::Rect::from_min_size(
+								egui::pos2(rect.left() + 12.0, rect.top()),
+								egui::vec2(64.0, rect.height()),
+							))
+							.layout(egui::Layout::left_to_right(egui::Align::Center)),
+						|ui| design::traffic_lights(ui),
+					);
+				}
 				let title_rect = egui::Rect::from_center_size(
 					rect.center(),
 					egui::vec2(rect.width() * 0.3, rect.height()),
@@ -1425,7 +1443,7 @@ impl MessagingUi {
 				ui.scope_builder(
 					egui::UiBuilder::new()
 						.max_rect(egui::Rect::from_min_max(
-							egui::pos2(rect.left() + design::TRAFFIC_LIGHT_INSET + 8.0, rect.top()),
+							egui::pos2(rect.left() + traffic_inset + 8.0, rect.top()),
 							egui::pos2(title_rect.left() - 10.0, rect.bottom()),
 						))
 						.layout(egui::Layout::left_to_right(egui::Align::Center)),
