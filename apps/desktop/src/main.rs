@@ -2683,7 +2683,7 @@ impl Desktop {
 			let wake = ctx.clone();
 			self.runtime.spawn(async move {
 				let destination =
-					platform::save::text_destination(parent, "serein-diagnostics.txt").await;
+					platform::save::text_destination(parent, "strafe-diagnostics.txt").await;
 				let outcome = match destination {
 					Some(path) => {
 						let written = path.clone();

@@ -34,7 +34,7 @@ const MAX_LINE_BYTES: usize = 320;
 /// The file rotates once; a run then stops appending instead of growing without end.
 const MAX_FILE_BYTES: u64 = 2 * 1024 * 1024;
 const MAX_RUN_BYTES: u64 = 4 * 1024 * 1024;
-const LOG_FILE: &str = "serein.log";
+const LOG_FILE: &str = "strafe.log";
 const PREVIOUS_LOG_FILE: &str = "serein.1.log";
 
 /// How much detail the log keeps: a record is written when its level is at or above the

@@ -151,7 +151,7 @@ fn write_symbolic_icon() -> Option<String> {
 	let base = std::env::var_os("XDG_RUNTIME_DIR")
 		.map(std::path::PathBuf::from)
 		.filter(|path| path.is_absolute())?;
-	let directory = base.join("serein-tray-icons");
+	let directory = base.join("strafe-tray-icons");
 	std::fs::DirBuilder::new()
 		.recursive(true)
 		.mode(0o700)

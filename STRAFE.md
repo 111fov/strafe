@@ -8,11 +8,12 @@ much smaller resource footprint than the Electron client.
 
 ## What this fork changes
 
-- Product name, window title, app ID (`app.strafe.client`) and data directory (`strafe-development`)
-  are Strafe. The internal crate/binary is still named `serein` so upstream patches stay easy to apply.
+- Product name, package and binary (`strafe`), window title, app ID (`app.strafe.client`) and
+  data directory (`strafe-development`) are Strafe.
 - Member lists start collapsed, giving chat more room on first launch.
-- The bundled **Strafe** theme uses a Discord-familiar palette with larger corner radii,
-  tighter spacing and flat surfaces.
+- The bundled **Strafe Black** theme is true black with minimal colour: white accent, desaturated
+  status colours, 10 px controls and a 16 px window radius.
+- macOS-style traffic lights replace the GTK header-bar buttons on Linux.
 - Upstream release auto-updates are disabled: this fork must never silently replace itself
   with an upstream Serein build.
 
@@ -31,9 +32,18 @@ cargo run --locked
 The first build takes a few minutes. Data lives in `~/.local/share/strafe-development`.
 Set `STRAFE_DATA_DIR` to use an isolated profile.
 
+## Installing
+
+```sh
+./install.sh          # build, install to ~/.local/bin, register the launcher and icons
+./uninstall.sh        # remove the binary, launcher and icons (data is kept)
+```
+
+The launcher uses `~/.local/bin/strafe`, so the build directory can be cleaned afterwards.
+
 ## Theme
 
-The theme package is [`extensions/themes/strafe.serein-extension`](../extensions/themes/strafe.serein-extension).
+The theme package is [`extensions/themes/strafe.serein-extension`](extensions/themes/strafe.serein-extension).
 `cargo test -p extensions --test strafe_theme` validates it against the current schema.
 
 To change it live, edit the package, then replace the copy installed under
