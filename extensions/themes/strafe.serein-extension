@@ -3,7 +3,7 @@
     "api_version": 1,
     "id": "strafe",
     "name": "Strafe Black",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "author": "local",
     "license": "MIT",
     "source": "",
@@ -29,9 +29,9 @@
         "link": "#a0a8b4",
         "mention_bg": "#1c1c1f",
         "mention_text": "#e6e6e8",
-        "positive": "#7e9b86",
-        "warning": "#b5a276",
-        "danger": "#c58a8a"
+        "positive": "#28c840",
+        "warning": "#febc2e",
+        "danger": "#ff5f57"
       }
     },
     "light": {
@@ -51,9 +51,9 @@
         "link": "#4a5a6e",
         "mention_bg": "#e4e4e7",
         "mention_text": "#26262a",
-        "positive": "#4f7a5b",
-        "warning": "#8a7442",
-        "danger": "#a85e5e"
+        "positive": "#28c840",
+        "warning": "#febc2e",
+        "danger": "#ff5f57"
       }
     },
     "style": {

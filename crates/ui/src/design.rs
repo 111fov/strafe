@@ -1532,7 +1532,7 @@ pub fn traffic_lights(ui: &mut egui::Ui) {
 		);
 		let inactive = Color32::from_gray(74);
 		let base = blend_color(inactive, color, focus_t);
-		let fill = base.gamma_multiply(1.0 + 0.10 * hover_t - 0.30 * press_t);
+		let fill = base.gamma_multiply(1.0 - 0.05 * hover_t - 0.25 * press_t);
 		ui.painter().circle_filled(rect.center(), 6.0, fill);
 		(rect, response)
 	};
