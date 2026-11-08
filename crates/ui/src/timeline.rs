@@ -2034,11 +2034,13 @@ fn unread_banner(
 	let colors = crate::design::palette(ui);
 	let mut jump_unread = false;
 	let mut mark_read = false;
-	let text = colors.accent_text;
+	// Keep the unread strip quiet: neutral raised surface, not the accent color. Accent
+	// stays for interactive controls, so a full-black theme does not get a white slab.
+	let text = colors.text_strong;
 	overlay_bar(
 		ui,
 		rect,
-		colors.accent,
+		colors.selected,
 		egui::CornerRadius {
 			nw: 0,
 			ne: 0,

@@ -16,5 +16,5 @@ fn strafe_theme_parses_and_validates() {
 	assert_eq!(style.window_radius, Some(16));
 	assert_eq!(style.menu_radius, Some(12));
 	assert_eq!(style.item_spacing, Some([6, 6]));
-	assert_eq!(style.control_height, Some(34));
+	assert_eq!(style.control_height, Some(32));
 }
