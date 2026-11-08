@@ -2127,7 +2127,7 @@ impl MessagingUi {
 						}
 						icons::paint(
 							ui.painter(),
-							icons::Icon::People,
+							icons::Icon::Strafe,
 							rect.shrink(7.0),
 							if friends || hovered {
 								colors.text_strong
