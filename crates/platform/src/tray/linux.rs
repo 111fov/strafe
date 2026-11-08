@@ -176,7 +176,7 @@ impl ksni::Tray for Item {
 		"serein".into()
 	}
 	fn title(&self) -> String {
-		"Serein".into()
+		"Aurora".into()
 	}
 	fn icon_name(&self) -> String {
 		// Without a theme path the name cannot resolve, so fall back to the pixmap only.
@@ -202,13 +202,13 @@ impl ksni::Tray for Item {
 	fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
 		vec![
 			StandardItem {
-				label: "Show Serein".into(),
+				label: "Show Aurora".into(),
 				activate: Box::new(|item: &mut Self| item.events.push(Event::Show)),
 				..Default::default()
 			}
 			.into(),
 			StandardItem {
-				label: "Minimize Serein".into(),
+				label: "Minimize Aurora".into(),
 				activate: Box::new(|item: &mut Self| item.events.push(Event::Minimize)),
 				..Default::default()
 			}

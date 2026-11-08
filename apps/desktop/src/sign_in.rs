@@ -1116,7 +1116,7 @@ impl Desktop {
 	}
 }
 
-/// The Serein mark on a solid accent tile; one shape at every size, no halo.
+/// The Aurora mark on a solid accent tile; one shape at every size, no halo.
 fn app_mark(ui: &mut egui::Ui, size: f32) {
 	let p = ui::design::palette(ui);
 	let (mark, _) = ui.allocate_exact_size(egui::Vec2::splat(size), egui::Sense::hover());
@@ -1124,7 +1124,7 @@ fn app_mark(ui: &mut egui::Ui, size: f32) {
 		.rect_filled(mark, (size * 0.25).round() as u8, p.accent);
 	ui::icons::paint(
 		ui.painter(),
-		ui::icons::Icon::Serein,
+		ui::icons::Icon::Aurora,
 		mark.shrink(size * 0.24),
 		p.accent_text,
 	);

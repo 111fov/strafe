@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Serein
+Name=Aurora
 Comment=Experimental unofficial native Discord client
 Exec=serein
 Icon=serein
-StartupWMClass=cz.viceverse.serein
+StartupWMClass=app.aurora.client
 Terminal=false
 Categories=Network;InstantMessaging;

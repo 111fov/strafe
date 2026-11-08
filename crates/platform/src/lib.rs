@@ -44,7 +44,7 @@ pub use login_linux::LoginView;
 
 /// Logical height of the native header the desktop app draws above the login webview.
 pub const LOGIN_HEADER_HEIGHT: f32 = 56.0;
-const SERVICE: &str = "cz.viceverse.serein";
+const SERVICE: &str = "app.aurora.client";
 #[cfg(not(feature = "development-data"))]
 const ACCOUNT: &str = "discord-session";
 #[cfg(feature = "development-data")]
@@ -212,7 +212,7 @@ pub(crate) fn ensure_webkit_locale() -> Result<(), &'static str> {
 		|| std::env::var_os("FLATPAK_ID").is_some();
 	if flatpak && !gtk4::glib::charset().0 {
 		return Err(
-			"Serein Flatpak login/verification requires a UTF-8 locale. Repair runtime languages and restart Serein; see Flatpak troubleshooting.",
+			"Aurora Flatpak login/verification requires a UTF-8 locale. Repair runtime languages and restart Aurora; see Flatpak troubleshooting.",
 		);
 	}
 	Ok(())
@@ -267,7 +267,7 @@ mod flatpak_locale_tests {
 				child.env("SEREIN_TEST_WEBKIT_INITIALIZE_GTK", "1");
 			}
 			if mode != "native" {
-				child.env("FLATPAK_ID", "cz.viceverse.serein");
+				child.env("FLATPAK_ID", "app.aurora.client");
 			}
 			let output = child.output().unwrap();
 			assert!(
@@ -396,7 +396,7 @@ fn credential_store() -> Result<(), CredentialError> {
 		.map_err(|_| CredentialError::NoStore)
 }
 /// Unlike keyring's one-shot default, a missing Secret Service is retried, so a provider that
-/// starts after Serein (or KWallet, which may need activating) is still found.
+/// starts after Aurora (or KWallet, which may need activating) is still found.
 #[cfg(target_os = "linux")]
 fn credential_store() -> Result<(), CredentialError> {
 	const RETRY: std::time::Duration = std::time::Duration::from_secs(15);

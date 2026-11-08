@@ -311,7 +311,7 @@ impl Diagnostics {
 		// Charge attempted output even if stderr is closed or accepts only part of a line.
 		self.remaining -= 1;
 		self.bytes -= bytes;
-		let _ = writeln!(writer, "[Serein {}] {label}", self.scope);
+		let _ = writeln!(writer, "[Aurora {}] {label}", self.scope);
 	}
 }
 fn ignored_dispatch_label(name: Option<&str>) -> &'static str {
@@ -3440,7 +3440,7 @@ mod member_tests {
 		for _ in 0..1000 {
 			enabled.record_to(label, &mut output);
 		}
-		let line = "[Serein gateway] unsupported dispatch ignored\n";
+		let line = "[Aurora gateway] unsupported dispatch ignored\n";
 		assert_eq!(output, line.repeat(64).as_bytes());
 		assert_eq!(enabled.remaining, 0);
 		assert_eq!(enabled.bytes, 8 * 1024 - output.len());
@@ -3452,7 +3452,7 @@ mod member_tests {
 		short.bytes = 20;
 		short.record_to("\u{e9}", &mut output);
 		short.record_to("another line", &mut output);
-		assert_eq!(output, "[Serein members] \u{e9}\n".as_bytes());
+		assert_eq!(output, "[Aurora members] \u{e9}\n".as_bytes());
 		assert_eq!((short.remaining, short.bytes), (63, 0));
 		static OVERSIZED: [u8; 8192] = [b'x'; 8192];
 		let mut oversized = Diagnostics::new("gateway", true);

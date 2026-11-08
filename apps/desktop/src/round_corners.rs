@@ -1,4 +1,4 @@
-//! Rounded window corners for the undecorated Linux window with Serein's own title bar.
+//! Rounded window corners for the undecorated Linux window with Aurora's own title bar.
 //!
 //! egui cannot clip to a rounded shape, so after the frame is drawn a full-window pass
 //! multiplies every pixel by the coverage of a rounded rectangle. Outside the shape the

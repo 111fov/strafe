@@ -144,7 +144,7 @@ fn installation() -> Result<PathBuf, String> {
 				);
 			}
 			return Err(
-				"Use your package manager to update Serein, or run a release AppImage.".into(),
+				"Use your package manager to update Aurora, or run a release AppImage.".into(),
 			);
 		}
 		let appdir = PathBuf::from(std::env::var_os("APPDIR").ok_or("Missing AppImage mount.")?);
@@ -152,7 +152,7 @@ fn installation() -> Result<PathBuf, String> {
 			.ok()
 			.as_ref() != Some(&exe)
 		{
-			return Err("Run Serein from its AppImage to install updates.".into());
+			return Err("Run Aurora from its AppImage to install updates.".into());
 		}
 		let image = PathBuf::from(std::env::var_os("APPIMAGE").ok_or("Missing AppImage path.")?);
 		let image = fs::canonicalize(image).map_err(|_| "Cannot locate the installed AppImage.")?;
@@ -190,7 +190,7 @@ fn installation() -> Result<PathBuf, String> {
 		}
 		if app.starts_with("/Volumes") || app.to_string_lossy().contains("/AppTranslocation/") {
 			return Err(
-				"Move Serein to Applications or another writable folder before updating.".into(),
+				"Move Aurora to Applications or another writable folder before updating.".into(),
 			);
 		}
 		Ok(app.to_owned())
@@ -202,11 +202,11 @@ fn installation() -> Result<PathBuf, String> {
 			|| !root.join("THIRD_PARTY_NOTICES.md").is_file()
 			|| !root.join("licenses").is_dir()
 		{
-			return Err("Run Serein from an extracted release package to install updates; source builds cannot replace themselves.".into());
+			return Err("Run Aurora from an extracted release package to install updates; source builds cannot replace themselves.".into());
 		}
 		Ok(root.to_owned())
 	} else {
-		Err("Use your package manager to update Serein on Linux.".into())
+		Err("Use your package manager to update Aurora on Linux.".into())
 	}
 }
 
@@ -231,7 +231,7 @@ pub(super) fn create_stage() -> Result<Staged, String> {
 		.open(&lock_path)
 		.map_err(|_| "The installation folder is not writable.".to_owned())?;
 	lock.try_lock()
-		.map_err(|_| "Another Serein instance is preparing update storage.".to_owned())?;
+		.map_err(|_| "Another Aurora instance is preparing update storage.".to_owned())?;
 	// One bounded staging directory per installation; discard leftovers only after their owner exits.
 	let mut count = 0;
 	for entry in
@@ -239,7 +239,7 @@ pub(super) fn create_stage() -> Result<Staged, String> {
 	{
 		count += 1;
 		if count > 16_384 {
-			return Err("The installation folder contains too many entries. Move Serein into its own folder.".into());
+			return Err("The installation folder contains too many entries. Move Aurora into its own folder.".into());
 		}
 		let entry = entry.map_err(|_| "Cannot inspect update storage.".to_owned())?;
 		let name = entry.file_name();
@@ -265,7 +265,7 @@ pub(super) fn create_stage() -> Result<Staged, String> {
 			.is_some_and(process_alive);
 		if helper_alive || (pid != std::process::id() && process_alive(pid)) {
 			return Err(
-				"Another Serein instance is preparing an update. Close it and try again.".into(),
+				"Another Aurora instance is preparing an update. Close it and try again.".into(),
 			);
 		}
 		if fs::read(entry.path().join("owner")).ok().as_deref() != Some(b"serein-updater-v1") {
@@ -302,7 +302,7 @@ pub(super) fn create_stage() -> Result<Staged, String> {
 		use std::os::unix::fs::DirBuilderExt;
 		builder.mode(0o700);
 	}
-	builder.create(&directory).map_err(|_| "The installation folder is not writable. Move Serein to a writable folder and try again.".to_owned())?;
+	builder.create(&directory).map_err(|_| "The installation folder is not writable. Move Aurora to a writable folder and try again.".to_owned())?;
 	fs::write(directory.join("owner"), b"serein-updater-v1")
 		.map_err(|_| "Cannot mark update storage ownership.".to_owned())?;
 	Ok(Staged {
@@ -749,7 +749,7 @@ fn verify_mac(candidate: &Path, installed: &Path) -> Result<(), String> {
 			.lines()
 			.find_map(|line| line.strip_prefix("TeamIdentifier="))
 			.filter(|team| team.len() == 10 && team.bytes().all(|b| b.is_ascii_alphanumeric()))
-			.ok_or("In-app installation requires a Developer ID signed release of Serein.")?;
+			.ok_or("In-app installation requires a Developer ID signed release of Aurora.")?;
 		let identifier = text
 			.lines()
 			.find_map(|line| line.strip_prefix("Identifier="))
@@ -758,8 +758,8 @@ fn verify_mac(candidate: &Path, installed: &Path) -> Result<(), String> {
 	}
 	let old = identity(installed)?;
 	let new = identity(candidate)?;
-	if old != new || new.1 != "cz.viceverse.serein" {
-		return Err("The update was not signed by this Serein publisher.".into());
+	if old != new || new.1 != "app.aurora.client" {
+		return Err("The update was not signed by this Aurora publisher.".into());
 	}
 	let status = Command::new("/usr/sbin/spctl")
 		.args(["--assess", "--type", "execute"])
@@ -892,7 +892,7 @@ pub(super) fn prepare_restart(
 		}
 		let _ = child.kill();
 		let _ = child.wait();
-		Err("The update helper did not start. Serein will remain open.".into())
+		Err("The update helper did not start. Aurora will remain open.".into())
 	}
 }
 
@@ -981,7 +981,7 @@ try {
     Move-Item -LiteralPath $source -Destination $target
     $replaced.Add($name)
   }
-  $uninstallKey = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Serein'
+  $uninstallKey = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Aurora'
   if ($plan.version -and (Test-Path -LiteralPath $uninstallKey)) {
     Set-ItemProperty -LiteralPath $uninstallKey -Name 'DisplayVersion' -Value ([string]$plan.version) -ErrorAction SilentlyContinue
   }

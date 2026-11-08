@@ -167,7 +167,7 @@ fn input(info: &pulse::pa_sink_input_info, own: &OwnApplication) -> Option<Input
 			property(info, c"application.name"),
 			property(info, c"application.id"),
 		) || property(info, c"flatpak.app-id")
-		.is_some_and(|v| v.eq_ignore_ascii_case("cz.viceverse.serein"))
+		.is_some_and(|v| v.eq_ignore_ascii_case("app.aurora.client"))
 	{
 		return None;
 	}
@@ -372,7 +372,7 @@ impl Native {
 			}
 			native.context = pulse::pa_context_new(
 				pulse::pa_mainloop_get_api(native.mainloop),
-				c"Serein screen audio".as_ptr(),
+				c"Aurora screen audio".as_ptr(),
 			);
 			if native.context.is_null()
 				|| pulse::pa_context_connect(
@@ -490,7 +490,7 @@ impl Capture {
 		let stream = unsafe {
 			pulse::pa_stream_new(
 				native.context,
-				c"Serein isolated screen audio".as_ptr(),
+				c"Aurora isolated screen audio".as_ptr(),
 				&spec,
 				null(),
 			)
@@ -820,12 +820,12 @@ pub(super) fn check_isolation() {
 	};
 	assert!(!own.allows(Some("42"), Some("renamed-client"), None, None));
 	assert!(!own.allows(Some("999"), Some("serein"), None, None));
-	assert!(!own.allows(Some("999"), Some("other"), Some("Serein call"), None));
+	assert!(!own.allows(Some("999"), Some("other"), Some("Aurora call"), None));
 	assert!(!own.allows(
 		Some("999"),
 		Some("other"),
 		None,
-		Some("cz.viceverse.serein")
+		Some("app.aurora.client")
 	));
 	assert!(!own.allows(None, Some("game"), None, None));
 	assert!(!own.allows(Some("123"), None, None, None));
@@ -875,7 +875,7 @@ pub(super) fn check_isolation() {
 			Some(c"game-output.monitor")
 		);
 		let selected = list.inputs[0].clone();
-		// A new Serein playback stream reusing a former game index is never admitted.
+		// A new Aurora playback stream reusing a former game index is never admitted.
 		list.inputs.clear();
 		pulse::pa_proplist_sets(
 			props,

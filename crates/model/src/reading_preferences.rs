@@ -23,8 +23,9 @@ impl Default for ReadingPreferences {
 		Self {
 			zoom_percent: 100,
 			sidebar_width: 236,
-			show_members: true,
-			show_members_dms: true,
+			// Aurora: start with the member list collapsed for a calmer, less cluttered view.
+			show_members: false,
+			show_members_dms: false,
 			compact_messages: false,
 			double_click_reaction_enabled: false,
 			double_click_reaction: 0,
@@ -63,7 +64,12 @@ mod tests {
 		let defaults = ReadingPreferences::default();
 		assert_eq!(defaults.zoom_percent, 100);
 		assert_eq!(defaults.sidebar_width, 236);
-		assert!(defaults.show_members && defaults.smooth_scrolling && defaults.is_valid());
+		assert!(
+			!defaults.show_members
+				&& !defaults.show_members_dms
+				&& defaults.smooth_scrolling
+				&& defaults.is_valid()
+		);
 		for zoom_percent in [0, 49, 50, 79, 80, 150, 151, u16::MAX] {
 			for sidebar_width in [0, 189, 190, 360, 361, u16::MAX] {
 				for show_members in [false, true] {

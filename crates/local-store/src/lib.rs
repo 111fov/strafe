@@ -57,7 +57,7 @@ pub struct AppPreferences {
 	/// Keep the home list's message requests section collapsed after a restart.
 	pub message_requests_collapsed: bool,
 	pub hide_window_decorations: bool,
-	/// Linux: replace the system title bar with Serein's own GTK 4 style header bar.
+	/// Linux: replace the system title bar with Aurora's own GTK 4 style header bar.
 	/// On by default, including for saved preferences from before the setting existed.
 	pub custom_title_bar: bool,
 	pub primary_color: Option<[u8; 3]>,
@@ -238,15 +238,15 @@ fn resolve_data_dir(configured: Option<OsString>, default: Option<PathBuf>) -> R
 	}
 }
 
-/// Keeps source-build data persistent but separate from installed Serein data.
+/// Keeps source-build data persistent but separate from installed Aurora data.
 fn default_data_dir() -> Option<PathBuf> {
 	#[cfg(feature = "development-data")]
 	{
-		dirs::data_local_dir().map(|root| root.join("serein-development"))
+		dirs::data_local_dir().map(|root| root.join("aurora-development"))
 	}
 	#[cfg(not(feature = "development-data"))]
 	{
-		dirs::data_local_dir().map(|root| root.join("serein"))
+		dirs::data_local_dir().map(|root| root.join("aurora"))
 	}
 }
 
@@ -269,7 +269,9 @@ fn create_data_dir(root: &Path) -> Result<()> {
 
 /// Shared root for local application data. Developers may select an isolated absolute path.
 pub fn data_dir() -> std::result::Result<PathBuf, StoreError> {
-	resolve_data_dir(std::env::var_os("SEREIN_DATA_DIR"), default_data_dir())
+	let configured = std::env::var_os("AURORA_DATA_DIR")
+		.or_else(|| std::env::var_os("SEREIN_DATA_DIR"));
+	resolve_data_dir(configured, default_data_dir())
 }
 
 /// Reject excess entries during parsing, before allocating a whole malformed array.
@@ -1703,7 +1705,7 @@ mod tests {
 			resolve_data_dir(None, Some(default.clone())),
 			Ok(default.clone())
 		);
-		let configured = default.join("serein-development");
+		let configured = default.join("aurora-development");
 		assert_eq!(
 			resolve_data_dir(Some(configured.clone().into_os_string()), None),
 			Ok(configured)
