@@ -3,7 +3,7 @@
     "api_version": 1,
     "id": "strafe",
     "name": "Strafe",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "local",
     "license": "MIT",
     "source": "",
@@ -14,21 +14,21 @@
   "theme": {
     "dark": {
       "colors": {
-        "base": "#1b1c1e",
-        "sidebar": "#26272a",
-        "chat": "#2f3034",
-        "raised": "#3a3b40",
-        "hover": "#404146",
-        "selected": "#4a4b52",
-        "border": "#202124",
+        "base": "#1e1f22",
+        "sidebar": "#2b2d31",
+        "chat": "#313338",
+        "raised": "#383a40",
+        "hover": "#3f4147",
+        "selected": "#404249",
+        "border": "#26272b",
         "text_strong": "#f2f3f5",
         "text": "#dbdee1",
-        "muted": "#9aa0a8",
+        "muted": "#949ba4",
         "accent": "#5865f2",
         "accent_text": "#ffffff",
         "link": "#00a8fc",
         "mention_bg": "#3c4270",
-        "mention_text": "#e0e2ff",
+        "mention_text": "#dee0fc",
         "positive": "#23a55a",
         "warning": "#f0b232",
         "danger": "#f23f43"
@@ -36,13 +36,13 @@
     },
     "light": {
       "colors": {
-        "base": "#f2f3f5",
-        "sidebar": "#e9eaec",
+        "base": "#e3e5e8",
+        "sidebar": "#f2f3f5",
         "chat": "#ffffff",
-        "raised": "#f5f6f7",
-        "hover": "#eceef0",
-        "selected": "#dfe1e5",
-        "border": "#e0e2e6",
+        "raised": "#ebedef",
+        "hover": "#e9eaec",
+        "selected": "#d7d9dc",
+        "border": "#e0e1e5",
         "text_strong": "#060607",
         "text": "#313338",
         "muted": "#5c5e66",
@@ -64,11 +64,11 @@
       "small_size": 12,
       "monospace_size": 14,
       "item_spacing": [6, 6],
-      "button_padding": [12, 7],
+      "button_padding": [12, 6],
       "control_height": 34,
-      "widget_radius": 14,
+      "widget_radius": 10,
       "window_radius": 16,
-      "menu_radius": 14
+      "menu_radius": 12
     }
   }
 }
