@@ -360,8 +360,17 @@ impl Desktop {
 			.frame(egui::Frame::NONE.fill(ui::design::window_palette(ui).canvas))
 			.show(ui, |ui| {
 				ui::design::window_drag(ui, ui.max_rect());
+				let rect = ui.max_rect();
+				// Match the main title strip: same height and base surface, no wordmark.
+				ui.painter().rect_filled(
+					egui::Rect::from_min_size(
+						rect.min,
+						egui::vec2(rect.width(), ui::design::TITLE_BAR_HEIGHT),
+					),
+					0,
+					ui::design::window_palette(ui).base,
+				);
 				if self.messaging.uses_custom_title_bar() {
-					let rect = ui.max_rect();
 					ui.scope_builder(
 						egui::UiBuilder::new()
 							.max_rect(egui::Rect::from_min_size(
@@ -372,47 +381,19 @@ impl Desktop {
 						|ui| ui::design::traffic_lights(ui),
 					);
 				}
-				egui::Frame::NONE
-					.inner_margin(egui::Margin {
-						left: if self.messaging.uses_custom_title_bar() {
-							16
-						} else {
-							(16.0 + self.traffic_light_inset()) as i8
-						},
-						right: if ui::design::WINDOW_CONTROLS_WIDTH > 0.0 {
-							0
-						} else {
-							16
-						},
-						top: if self.messaging.uses_custom_title_bar() {
-							40
-						} else if ui::design::WINDOW_CONTROLS_WIDTH > 0.0 {
-							0
-						} else {
-							16
-						},
-						bottom: 0,
-					})
-					.show(ui, |ui| {
-						ui.horizontal(|ui| {
-							ui.label(
-								ui::design::semibold(
-									ui,
-									ui::i18n::translate("main-restoring-screen-serein"),
-									16.0,
-								)
-								.color(p.muted),
-							);
-							ui.with_layout(
-								egui::Layout::right_to_left(egui::Align::Center),
-								|ui| {
-									if !self.messaging.hide_title_bar {
-										ui::design::window_controls(ui);
-									}
-								},
-							);
-						});
-					});
+				ui.scope_builder(
+					egui::UiBuilder::new()
+						.max_rect(egui::Rect::from_min_max(
+							rect.min,
+							egui::pos2(
+								rect.right() - 12.0,
+								rect.top() + ui::design::TITLE_BAR_HEIGHT,
+							),
+						))
+						.layout(egui::Layout::right_to_left(egui::Align::Center)),
+					|ui| ui::design::window_controls(ui),
+				);
+				ui.add_space(ui::design::TITLE_BAR_HEIGHT + 4.0);
 				let time = ui.input(|i| i.time) as f32;
 				ui.ctx().request_repaint();
 				ui.vertical_centered(|ui| {
