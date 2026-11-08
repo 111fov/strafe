@@ -1489,12 +1489,6 @@ pub fn window_controls(ui: &mut egui::Ui) {
 	ui.spacing_mut().item_spacing.x = saved_spacing;
 }
 
-fn blend_color(a: Color32, b: Color32, t: f32) -> Color32 {
-	let t = t.clamp(0.0, 1.0);
-	let mix = |x: u8, y: u8| (x as f32 + (y as f32 - x as f32) * t).round() as u8;
-	Color32::from_rgb(mix(a.r(), b.r()), mix(a.g(), b.g()), mix(a.b(), b.b()))
-}
-
 /// macOS-style traffic lights for Linux's undecorated window: three 12 pt circles at the
 /// left edge. Hover and press colours ease in, and glyphs fade in only while the group is
 /// hovered, as on macOS. Lay out in a left-to-right `ui`.
@@ -1530,8 +1524,9 @@ pub fn traffic_lights(ui: &mut egui::Ui) {
 			0.07,
 			egui::emath::easing::quadratic_out,
 		);
-		let inactive = Color32::from_gray(74);
-		let base = blend_color(inactive, color, focus_t);
+		// Keep the lights recognisably coloured when the window is inactive; a grey
+		// fallback on a black title bar reads as three blank holes until the user clicks.
+		let base = color.gamma_multiply(0.6 + 0.4 * focus_t);
 		let fill = base.gamma_multiply(1.0 - 0.05 * hover_t - 0.25 * press_t);
 		ui.painter().circle_filled(rect.center(), 6.0, fill);
 		(rect, response)
