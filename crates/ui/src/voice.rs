@@ -1855,6 +1855,7 @@ impl MessagingUi {
 				));
 			} else if !state.demo
 				&& state.permission(channel, model::permissions::USE_VAD) != Some(true)
+				&& !self.voice_push_to_talk
 			{
 				notices.push((
 					"Push-to-talk is required to speak here. Enable it in Voice settings.".into(),
@@ -3189,10 +3190,18 @@ impl MessagingUi {
 			&& state.can_camera(channel)
 			&& matches!(phase, Phase::Connected | Phase::Waiting);
 		let can_speak = state.can_speak(channel);
-		let deafened = self.voice_deafened;
-		let muted = self.voice_muted || deafened || !can_speak;
+		// Server mute/deafen cannot be overridden locally. Reflect them in the control bar
+		// instead of showing an unmuted microphone that never transmits.
+		let server_muted = call.server_muted;
+		let server_deafened = call.server_deafened;
+		let ptt_required = !state.demo
+			&& state.permission(channel, model::permissions::USE_VAD) != Some(true);
+		let deafened = self.voice_deafened || server_deafened;
+		let muted = self.voice_muted || deafened || !can_speak || server_muted;
 		let controls = self.controls_enabled(state);
 		let voice_toggles = controls || state.demo;
+		let mic_enabled =
+			voice_toggles && (can_speak || state.demo) && !server_muted && !server_deafened;
 		let focused = self.voice_focus.is_some();
 		let screen_focused = matches!(
 			self.voice_focus,
@@ -3248,6 +3257,19 @@ impl MessagingUi {
 		);
 		row.spacing_mut().item_spacing.x = BAR_GAP;
 		pill(&mut row, media, |ui| {
+			let mic_hint = if server_deafened {
+				"Deafened by the server"
+			} else if server_muted {
+				"Muted by the server"
+			} else if !can_speak {
+				"Speaking is unavailable in this channel."
+			} else if ptt_required && !self.voice_push_to_talk {
+				"Push-to-talk is required in this channel. Enable it in Voice settings."
+			} else if muted {
+				"Turn on microphone"
+			} else {
+				"Turn off microphone"
+			};
 			let mic = control(
 				ui,
 				if muted {
@@ -3256,16 +3278,16 @@ impl MessagingUi {
 					crate::icons::Icon::Microphone
 				},
 				48.0,
-				voice_toggles && (can_speak || state.demo),
-				if muted { colors.danger } else { STAGE_TEXT },
-				if muted { "Unmute" } else { "Mute" },
-				if !can_speak {
-					"Speaking is unavailable in this channel."
-				} else if muted {
-					"Turn on microphone"
+				mic_enabled,
+				if muted {
+					colors.danger
+				} else if ptt_required && !self.voice_push_to_talk {
+					colors.warning
 				} else {
-					"Turn off microphone"
+					STAGE_TEXT
 				},
+				if muted { "Unmute" } else { "Mute" },
+				mic_hint,
 			);
 			mute_clicked = mic.clicked();
 			if chevrons {
