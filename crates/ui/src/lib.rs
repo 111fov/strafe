@@ -521,6 +521,9 @@ pub struct MessagingUi {
 	pub voice_processing: model::voice_settings::VoiceProcessing,
 	pub voice_preview_requested: bool,
 	pub voice_preview_level: Option<f32>,
+	/// Set once the preview has heard a real signal, so the no-signal hint never flickers
+	/// between words or during normal room noise.
+	pub voice_preview_heard_signal: bool,
 	pub voice_preview_status: &'static str,
 	/// Device-local application shortcuts; the desktop host mirrors the global binding.
 	pub keybinds: model::Keybinds,

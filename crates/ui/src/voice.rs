@@ -2303,6 +2303,7 @@ impl MessagingUi {
 				15.0,
 			));
 			if input {
+				let before = self.voice_input.clone();
 				device_combo(
 					ui,
 					"voice-input",
@@ -2311,6 +2312,9 @@ impl MessagingUi {
 					&mut self.voice_input,
 				)
 				.labelled_by(label.id);
+				if self.voice_input != before {
+					self.voice_preview_heard_signal = false;
+				}
 				gain_slider(
 					ui,
 					&mut self.voice_gain.input_percent,
@@ -2402,6 +2406,15 @@ impl MessagingUi {
 
 	fn microphone_preview_controls(&mut self, ui: &mut egui::Ui, active: bool) {
 		let colors = design::palette(ui);
+		// A working microphone almost always produces some signal. Latch that fact so the
+		// diagnostic below cannot flash in and out of the layout between words.
+		const NO_SIGNAL_DB: f32 = -80.0;
+		if self
+			.voice_preview_level
+			.is_some_and(|db| db > NO_SIGNAL_DB)
+		{
+			self.voice_preview_heard_signal = true;
+		}
 		ui.label(design::medium(
 			ui,
 			crate::i18n::translate("voice-microphone-preview-controls-microphone-test"),
@@ -2437,6 +2450,7 @@ impl MessagingUi {
 					self.voice_preview_requested = !self.voice_preview_requested;
 					self.voice_preview_status = "";
 					self.voice_preview_level = None;
+					self.voice_preview_heard_signal = false;
 					ui.ctx().request_repaint();
 				}
 			});
@@ -2486,8 +2500,11 @@ impl MessagingUi {
 					.color(colors.muted),
 			);
 		}
-		if (self.voice_preview_requested || active)
-			&& self.voice_preview_level.is_some_and(|db| db <= -60.0)
+		if self.voice_preview_requested
+			&& !self.voice_preview_heard_signal
+			&& self
+				.voice_preview_level
+				.is_some_and(|db| db <= NO_SIGNAL_DB)
 		{
 			design::hint(
 				ui,
@@ -2746,6 +2763,7 @@ impl MessagingUi {
 				15.0,
 			));
 			if input {
+				let before = self.voice_input.clone();
 				device_combo(
 					ui,
 					"voice-input",
@@ -2754,6 +2772,9 @@ impl MessagingUi {
 					&mut self.voice_input,
 				)
 				.labelled_by(label.id);
+				if self.voice_input != before {
+					self.voice_preview_heard_signal = false;
+				}
 			} else {
 				device_combo(
 					ui,
