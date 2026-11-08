@@ -269,7 +269,8 @@ fn create_data_dir(root: &Path) -> Result<()> {
 
 /// Shared root for local application data. Developers may select an isolated absolute path.
 pub fn data_dir() -> std::result::Result<PathBuf, StoreError> {
-	let configured = std::env::var_os("AURORA_DATA_DIR")
+	let configured = std::env::var_os("STRAFE_DATA_DIR")
+		.or_else(|| std::env::var_os("AURORA_DATA_DIR"))
 		.or_else(|| std::env::var_os("SEREIN_DATA_DIR"));
 	resolve_data_dir(configured, default_data_dir())
 }

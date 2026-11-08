@@ -29,7 +29,7 @@ cargo run --locked
 ```
 
 The first build takes a few minutes. Data lives in `~/.local/share/strafe-development`.
-Set `AURORA_DATA_DIR` to use an isolated profile.
+Set `STRAFE_DATA_DIR` to use an isolated profile.
 
 ## Theme
 
