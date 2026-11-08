@@ -1489,11 +1489,18 @@ pub fn window_controls(ui: &mut egui::Ui) {
 	ui.spacing_mut().item_spacing.x = saved_spacing;
 }
 
+fn blend_color(a: Color32, b: Color32, t: f32) -> Color32 {
+	let t = t.clamp(0.0, 1.0);
+	let mix = |x: u8, y: u8| (x as f32 + (y as f32 - x as f32) * t).round() as u8;
+	Color32::from_rgb(mix(a.r(), b.r()), mix(a.g(), b.g()), mix(a.b(), b.b()))
+}
+
 /// macOS-style traffic lights for Linux's undecorated window: three 12 pt circles at the
-/// left edge. Glyphs appear only while the group is hovered, as on macOS. Lay out in a
-/// left-to-right `ui`.
+/// left edge. Hover and press colours ease in, and glyphs fade in only while the group is
+/// hovered, as on macOS. Lay out in a left-to-right `ui`.
 pub fn traffic_lights(ui: &mut egui::Ui) {
-	let focused = ui.ctx().input(|input| input.focused);
+	let ctx = ui.ctx().clone();
+	let focused = ctx.input(|input| input.focused);
 	let maximized = ui.input(|input| input.viewport().maximized.unwrap_or(false));
 	let saved_spacing = ui.spacing().item_spacing.x;
 	ui.spacing_mut().item_spacing.x = 8.0;
@@ -1504,15 +1511,28 @@ pub fn traffic_lights(ui: &mut egui::Ui) {
 		response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, label));
 		let hovered = response.hovered() || response.has_focus();
 		let active = response.is_pointer_button_down_on();
-		let fill = if !focused {
-			Color32::from_gray(70)
-		} else if active {
-			color.gamma_multiply(0.72)
-		} else if hovered {
-			color.gamma_multiply(1.12)
-		} else {
-			color
-		};
+		let id = ui.scope_id().with(("traffic-light", label));
+		let focus_t = ctx.animate_bool_with_time_and_easing(
+			id.with("focus"),
+			focused,
+			0.22,
+			egui::emath::easing::quadratic_out,
+		);
+		let hover_t = ctx.animate_bool_with_time_and_easing(
+			id.with("hover"),
+			hovered,
+			0.14,
+			egui::emath::easing::quadratic_out,
+		);
+		let press_t = ctx.animate_bool_with_time_and_easing(
+			id.with("press"),
+			active,
+			0.07,
+			egui::emath::easing::quadratic_out,
+		);
+		let inactive = Color32::from_gray(74);
+		let base = blend_color(inactive, color, focus_t);
+		let fill = base.gamma_multiply(1.0 + 0.10 * hover_t - 0.30 * press_t);
 		ui.painter().circle_filled(rect.center(), 6.0, fill);
 		(rect, response)
 	};
@@ -1527,22 +1547,30 @@ pub fn traffic_lights(ui: &mut egui::Ui) {
 		|| close_response.has_focus()
 		|| minimize_response.has_focus()
 		|| toggle_response.has_focus();
-	if hovered && focused {
-		let ink = Color32::from_rgb(0x3d, 0x0c, 0x0c);
+	let glyph_t = ctx.animate_bool_with_time_and_easing(
+		ui.scope_id().with("traffic-glyphs"),
+		hovered && focused,
+		0.18,
+		egui::emath::easing::quadratic_out,
+	);
+	if glyph_t > 0.01 {
+		let close_ink = Color32::from_rgb(0x4c, 0x00, 0x00).gamma_multiply(glyph_t);
+		let minimize_ink = Color32::from_rgb(0x99, 0x57, 0x00).gamma_multiply(glyph_t);
+		let maximize_ink = Color32::from_rgb(0x00, 0x65, 0x00).gamma_multiply(glyph_t);
 		let close_center = close.center();
 		painter.line_segment(
 			[
 				close_center + egui::vec2(-3.2, -3.2),
 				close_center + egui::vec2(3.2, 3.2),
 			],
-			Stroke::new(1.4, ink),
+			Stroke::new(1.4, close_ink),
 		);
 		painter.line_segment(
 			[
 				close_center + egui::vec2(-3.2, 3.2),
 				close_center + egui::vec2(3.2, -3.2),
 			],
-			Stroke::new(1.4, ink),
+			Stroke::new(1.4, close_ink),
 		);
 		let minimize_center = minimize.center();
 		painter.line_segment(
@@ -1550,27 +1578,31 @@ pub fn traffic_lights(ui: &mut egui::Ui) {
 				minimize_center + egui::vec2(-4.0, 0.0),
 				minimize_center + egui::vec2(4.0, 0.0),
 			],
-			Stroke::new(1.4, ink),
+			Stroke::new(1.4, minimize_ink),
 		);
 		let toggle_center = toggle.center();
 		if maximized {
-			let square =
-				egui::Rect::from_center_size(toggle_center, egui::Vec2::splat(6.0));
-			painter.rect_stroke(square, 1.0, Stroke::new(1.4, ink), egui::StrokeKind::Middle);
+			let square = egui::Rect::from_center_size(toggle_center, egui::Vec2::splat(6.0));
+			painter.rect_stroke(
+				square,
+				1.0,
+				Stroke::new(1.4, maximize_ink),
+				egui::StrokeKind::Middle,
+			);
 		} else {
 			painter.line_segment(
 				[
 					toggle_center + egui::vec2(-3.6, 0.0),
 					toggle_center + egui::vec2(3.6, 0.0),
 				],
-				Stroke::new(1.4, ink),
+				Stroke::new(1.4, maximize_ink),
 			);
 			painter.line_segment(
 				[
 					toggle_center + egui::vec2(0.0, -3.6),
 					toggle_center + egui::vec2(0.0, 3.6),
 				],
-				Stroke::new(1.4, ink),
+				Stroke::new(1.4, maximize_ink),
 			);
 		}
 	}
