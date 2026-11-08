@@ -7,3 +7,9 @@
 .DS_Store
 node_modules/
 __pycache__/
+
+# Local release artifacts
+/strafe-v*/
+/SHA256SUMS.txt
+*.tar.gz
+*.zip

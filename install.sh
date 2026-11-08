@@ -16,14 +16,14 @@ ICONS="${PREFIX}/share/icons/hicolor"
 install -Dm755 "$BIN" "${PREFIX}/bin/strafe"
 install -d "$APPS"
 
-cat > "${APPS}/app.strafe.client.desktop" <<EOF
+cat > "${APPS}/strafe.desktop" <<EOF
 [Desktop Entry]
 Type=Application
 Name=Strafe
 Comment=Native Discord client
 Exec=${PREFIX}/bin/strafe
 TryExec=${PREFIX}/bin/strafe
-Icon=strafe
+Icon=${ICONS}/256x256/apps/strafe.png
 StartupWMClass=app.strafe.client
 Terminal=false
 Categories=Network;InstantMessaging;

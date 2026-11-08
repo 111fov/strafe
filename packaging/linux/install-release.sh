@@ -13,8 +13,10 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 
 install -Dm755 strafe "${PREFIX}/bin/strafe"
-install -Dm644 strafe.desktop "${APPS}/app.strafe.client.desktop"
-sed -i "s|^Exec=.*|Exec=${PREFIX}/bin/strafe|" "${APPS}/app.strafe.client.desktop"
+install -Dm644 strafe.desktop "${APPS}/strafe.desktop"
+sed -i -e "s|^Exec=.*|Exec=${PREFIX}/bin/strafe|" \
+    -e "s|^Icon=.*|Icon=${ICONS}/256x256/apps/strafe.png|" \
+    "${APPS}/strafe.desktop"
 
 for source in icons/hicolor/*/apps/strafe.png; do
     [ -f "$source" ] || continue
