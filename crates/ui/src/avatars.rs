@@ -14,8 +14,8 @@ use std::{
 pub(crate) use media::{Quality, Surface};
 
 pub type GifFrames = Vec<(Duration, std::sync::Arc<ColorImage>)>;
-const ANIMATIONS: usize = 128;
-const ANIMATION_BYTES: usize = 128 * 1024 * 1024;
+const ANIMATIONS: usize = 64;
+const ANIMATION_BYTES: usize = 64 * 1024 * 1024;
 const ANIMATION_INTERVAL: Duration = Duration::from_millis(16);
 /// Decoded frames unplayed for this long are released; the still stays, and the frames are decoded
 /// again from the disk cache once the artwork would play. Off-screen GIFs and hover-only avatars
@@ -34,14 +34,14 @@ struct Animation {
 }
 
 // Emoji artwork has its own working set so media cannot evict it.
-const EMOJI_TEXTURES: usize = 1024;
-const EMOJI_TEXTURE_BYTES: usize = 16 * 1024 * 1024;
-const TEXTURES: usize = 512;
-const TEXTURE_BYTES: usize = 64 * 1024 * 1024;
-const IDLE_TEXTURES: Duration = Duration::from_secs(60);
+const EMOJI_TEXTURES: usize = 512;
+const EMOJI_TEXTURE_BYTES: usize = 8 * 1024 * 1024;
+const TEXTURES: usize = 256;
+const TEXTURE_BYTES: usize = 32 * 1024 * 1024;
+const IDLE_TEXTURES: Duration = Duration::from_secs(30);
 const SOURCE_EDGE: usize = 128;
-const SOURCE_BYTES: usize = 48 * 1024 * 1024;
-const FIT_BYTES: usize = 16 * 1024 * 1024;
+const SOURCE_BYTES: usize = 24 * 1024 * 1024;
+const FIT_BYTES: usize = 8 * 1024 * 1024;
 const FITS_PER_IMAGE: usize = 4;
 /// Longest edge for string-keyed artwork: stickers, picker previews, banners and activity art.
 pub const EMBED_EDGE: u32 = 512;
