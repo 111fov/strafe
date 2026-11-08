@@ -478,10 +478,15 @@ impl Desktop {
 		egui::CentralPanel::default()
 			.frame(egui::Frame::NONE.fill(ui::design::window_palette(ui).canvas))
 			.show(ui, |ui| {
+				let header_height = if cfg!(target_os = "linux") {
+					ui::design::TITLE_BAR_HEIGHT
+				} else {
+					SIGN_IN_HEADER_HEIGHT
+				};
 				egui::Panel::top("sign-in-header")
-					.exact_size(SIGN_IN_HEADER_HEIGHT)
+					.exact_size(header_height)
 					.show_separator_line(false)
-					.frame(egui::Frame::NONE)
+					.frame(egui::Frame::NONE.fill(ui::design::window_palette(ui).base))
 					.show(ui, |ui| {
 						// Drag first: later widgets win hit testing, so the header buttons stay clickable.
 						ui::design::window_drag(ui, ui.max_rect());
@@ -493,22 +498,6 @@ impl Desktop {
 							} else {
 								ui.add_space(16.0 + self.traffic_light_inset());
 							}
-							app_mark(ui, 20.0);
-							ui.add_space(8.0);
-							ui.label(
-								ui::design::semibold(
-									ui,
-									ui::i18n::translate("main-sign-in-screen-serein"),
-									15.0,
-								)
-								.color(p.text_strong),
-							);
-							ui.add_space(8.0);
-							ui.label(
-								egui::RichText::new("Early preview")
-									.size(13.0)
-									.color(p.muted),
-							);
 							ui.with_layout(
 								egui::Layout::right_to_left(egui::Align::Center),
 								|ui| {

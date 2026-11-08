@@ -6299,13 +6299,17 @@ impl eframe::App for Desktop {
 		}
 		if self.login.is_some() {
 			let p = ui::design::palette(ui);
+			let header_height = if cfg!(target_os = "linux") {
+				ui::design::TITLE_BAR_HEIGHT
+			} else {
+				platform::LOGIN_HEADER_HEIGHT
+			};
 			egui::Panel::top("login-header")
-				.exact_size(platform::LOGIN_HEADER_HEIGHT)
+				.exact_size(header_height)
 				.show_separator_line(false)
 				.frame(
 					egui::Frame::NONE
-						.fill(ui::design::window_palette(ui).surface)
-						.stroke(egui::Stroke::new(1.0, p.border))
+						.fill(ui::design::window_palette(ui).base)
 						.inner_margin(egui::Margin::symmetric(16, 0)),
 				)
 				.show(ui, |ui| {
@@ -6318,34 +6322,14 @@ impl eframe::App for Desktop {
 						} else {
 							ui.add_space(self.traffic_light_inset());
 						}
-						let (rect, _) =
-							ui.allocate_exact_size(egui::vec2(32.0, 32.0), egui::Sense::hover());
-						ui.painter().rect_filled(rect, 8, p.accent);
-						ui::icons::paint(
-							ui.painter(),
-							ui::icons::Icon::Strafe,
-							rect.shrink(7.0),
-							p.accent_text,
+						ui.label(
+							ui::design::semibold(
+								ui,
+								ui::i18n::translate("main-ui-sign-in-to-discord"),
+								13.0,
+							)
+							.color(p.text_strong),
 						);
-						ui.add_space(4.0);
-						ui.vertical(|ui| {
-							ui.spacing_mut().item_spacing.y = 1.0;
-							ui.label(
-								ui::design::semibold(
-									ui,
-									ui::i18n::translate("main-ui-sign-in-to-discord"),
-									15.0,
-								)
-								.color(p.text_strong),
-							);
-							ui.label(
-								egui::RichText::new(ui::i18n::translate(
-									"main-ui-discord-com-temporary-login-window-passwords-and-2fa-never-leave",
-								))
-								.size(12.0)
-								.color(p.muted),
-							);
-						});
 						ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
 							if !self.messaging.hide_title_bar {
 								ui::design::window_controls(ui);
