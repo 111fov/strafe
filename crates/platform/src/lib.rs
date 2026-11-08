@@ -382,8 +382,11 @@ fn forget_login(name: &str) -> Result<(), CredentialError> {
 }
 
 fn entry(name: &str) -> Result<keyring_core::Entry, CredentialError> {
+	entry_for(SERVICE, name)
+}
+fn entry_for(service: &str, name: &str) -> Result<keyring_core::Entry, CredentialError> {
 	credential_store()?;
-	keyring_core::Entry::new(SERVICE, name).map_err(|error| match error {
+	keyring_core::Entry::new(service, name).map_err(|error| match error {
 		keyring_core::Error::NoDefaultStore => CredentialError::NoStore,
 		_ => CredentialError::Unavailable,
 	})
@@ -456,7 +459,10 @@ fn activate_kwallet() {
 	}
 }
 fn load_entry(name: &str) -> Result<Option<SessionSecret>, CredentialError> {
-	match entry(name)?.get_password() {
+	load_entry_for(SERVICE, name)
+}
+fn load_entry_for(service: &str, name: &str) -> Result<Option<SessionSecret>, CredentialError> {
+	match entry_for(service, name)?.get_password() {
 		Ok(value) => SessionSecret::from_owner_input(value)
 			.map(Some)
 			.map_err(|_| CredentialError::Invalid),
@@ -464,13 +470,46 @@ fn load_entry(name: &str) -> Result<Option<SessionSecret>, CredentialError> {
 		Err(_) => Err(CredentialError::Unavailable),
 	}
 }
+/// Services this app stored logins under before the Strafe rename. A saved account must keep
+/// working across a rebrand, so the first successful read is copied to the current service.
+const LEGACY_SERVICES: &[&str] = &["app.aurora.client", "cz.viceverse.serein"];
+fn load_entry_migrating(name: &str) -> Result<Option<SessionSecret>, CredentialError> {
+	if let Some(secret) = load_entry(name)? {
+		return Ok(Some(secret));
+	}
+	for service in LEGACY_SERVICES {
+		match load_entry_for(service, name) {
+			Ok(Some(secret)) => {
+				let _ = save_entry(name, &secret);
+				return Ok(Some(secret));
+			}
+			Ok(None) => {}
+			Err(_) => {}
+		}
+	}
+	Ok(None)
+}
 fn save_entry(name: &str, secret: &SessionSecret) -> Result<(), CredentialError> {
-	entry(name)?
+	save_entry_for(SERVICE, name, secret)
+}
+fn save_entry_for(
+	service: &str,
+	name: &str,
+	secret: &SessionSecret,
+) -> Result<(), CredentialError> {
+	entry_for(service, name)?
 		.set_password(secret.expose())
 		.map_err(|_| CredentialError::Unavailable)
 }
 fn forget_entry(name: &str) -> Result<(), CredentialError> {
-	match entry(name)?.delete_credential() {
+	let primary = forget_entry_for(SERVICE, name);
+	for service in LEGACY_SERVICES {
+		let _ = forget_entry_for(service, name);
+	}
+	primary
+}
+fn forget_entry_for(service: &str, name: &str) -> Result<(), CredentialError> {
+	match entry_for(service, name)?.delete_credential() {
 		Ok(()) | Err(keyring_core::Error::NoEntry) => Ok(()),
 		Err(_) => Err(CredentialError::Unavailable),
 	}

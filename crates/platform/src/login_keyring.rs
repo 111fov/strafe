@@ -33,7 +33,7 @@ fn start_worker(execute: impl Fn(Operation) -> Result + Send + 'static) -> mpsc:
 fn worker() -> &'static mpsc::SyncSender<Job> {
 	WORKER.get_or_init(|| {
 		start_worker(|operation| match operation {
-			Operation::Load(name) => crate::load_entry(&name),
+			Operation::Load(name) => crate::load_entry_migrating(&name),
 			Operation::Save(name, secret) => crate::save_entry(&name, &secret).map(|()| None),
 			Operation::Forget(name) => crate::forget_entry(&name).map(|()| None),
 		})
